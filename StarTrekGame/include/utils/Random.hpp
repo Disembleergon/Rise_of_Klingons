@@ -1,10 +1,12 @@
-#pragma once
+#ifndef RANDOM_HPP
+#define RANDOM_HPP
+
 #include <concepts>
 #include <random>
 
 class Random
 {
-public:
+  public:
     template <std::integral T> static T generate_integral(const T min, const T max)
     {
         std::uniform_int_distribution<T> dist(min, max);
@@ -17,10 +19,12 @@ public:
         return dist(engine);
     }
 
-private:
+  private:
     static std::random_device rd;
     static std::mt19937_64 engine;
 };
 
 std::random_device Random::rd;
-std::mt19937_64 Random::engine{ Random::rd() };
+std::mt19937_64 Random::engine{Random::rd()};
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef TIME_HPP
+#define TIME_HPP
+
 #include <SFML/System.hpp>
 
 // for movement etc., always multiply the values with deltaTime!
@@ -5,7 +8,7 @@
 
 class Time
 {
-public:
+  public:
     static void updateDeltaTime()
     {
         deltaTime = m_dtClock.restart().asSeconds();
@@ -13,6 +16,8 @@ public:
 
     static float deltaTime;
 
-private:
+  private:
     static sf::Clock m_dtClock;
 };
+
+#endif

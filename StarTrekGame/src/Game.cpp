@@ -1,5 +1,5 @@
-#include "Game.hpp"
-#include "utils/Time.hpp"
+#include "../include/Game.hpp"
+#include "../include/utils/Time.hpp"
 
 Game::Game(unsigned int w, unsigned int h, const sf::String &title) : m_window{sf::VideoMode{w, h}, title}
 {
