@@ -1,7 +1,15 @@
 #include "./include/Game.hpp"
+#include "include/utils/ErrorHandling.hpp"
 
 int main()
 {
-	Game window{ 1800, 1300, "Star Trek Game" };
-	window.run();
+    try
+    {
+        Game window{1800, 1300, "Star Trek Game"};
+        window.run();
+    }
+    catch (const asset_not_found &e)
+    {
+        ErrorHandler::showErrorBox("Couldn't find asset(s).");
+    }
 }

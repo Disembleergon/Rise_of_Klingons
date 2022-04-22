@@ -1,6 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "GameSprite.hpp"
 #include <SFML/Graphics.hpp>
 
 class Game
@@ -12,6 +13,8 @@ class Game
   private:
     sf::RenderWindow m_window;
     void handleEvents();
+
+    const GameSprite _bg;
 };
 
 #endif
