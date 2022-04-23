@@ -1,7 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "GameSprite.hpp"
+#include "views/Bridge.hpp"
 #include <SFML/Graphics.hpp>
 
 class Game
@@ -14,7 +14,7 @@ class Game
     sf::RenderWindow m_window;
     void handleEvents();
 
-    const GameSprite _bg;
+    Bridge _bridge;
 };
 
 #endif

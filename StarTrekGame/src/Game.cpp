@@ -2,9 +2,7 @@
 #include "../include/utils/Time.hpp"
 
 Game::Game(unsigned int w, unsigned int h, const sf::String &title)
-    : m_window{sf::VideoMode{w, h}, title}, _bg{"./assets/bridge.png",
-                                                {0, 0},
-                                                static_cast<sf::Vector2f>(m_window.getSize())}
+    : m_window{sf::VideoMode{w, h}, title}, _bridge(m_window)
 {
     m_window.setFramerateLimit(60);
     m_window.setVerticalSyncEnabled(true);
@@ -29,8 +27,10 @@ void Game::run()
         Time::updateDeltaTime();
         handleEvents();
 
+        _bridge.update();
+
         m_window.clear();
-        m_window.draw(_bg);
+        _bridge.draw();
         m_window.display();
     }
 }

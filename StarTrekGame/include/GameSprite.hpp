@@ -7,6 +7,7 @@
 class GameSprite : public sf::RectangleShape
 {
   public:
+    GameSprite() = default;
     GameSprite(const sf::String &texturePath, const sf::Vector2f &pos = {}, const sf::Vector2f &size = {})
     {
         setPosition(pos);
