@@ -1,15 +1,15 @@
 #ifndef Clickable_HPP
 #define Clickable_HPP
 
-#include "GameScript.hpp"
+#include "Component.hpp"
 #include "GameSprite.hpp"
 #include <functional>
 
-class Clickable : public GameSprite, public GameScript
+class Clickable : public GameSprite, public Component
 {
   public:
     Clickable() = delete;
-    Clickable(sf::RenderWindow &window) : GameScript(window)
+    Clickable(sf::RenderWindow &window) : Component(window)
     {
         setOutlineThickness(hitboxOutlineThickness);
         setOutlineColor(sf::Color::Transparent);

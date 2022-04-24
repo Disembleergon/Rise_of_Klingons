@@ -1,7 +1,7 @@
 #include "../../include/views/Bridge.hpp"
 
 Bridge::Bridge(sf::RenderWindow &window)
-    : GameScript(window), _bg{"./assets/bridge.png", {0, 0}, static_cast<sf::Vector2f>(window.getSize())},
+    : Component(window), _bg{"./assets/bridge.png", {0, 0}, static_cast<sf::Vector2f>(window.getSize())},
       _helmsman{m_window}, _tacticalOfficer{m_window}
 {
     _helmsman.setNewTexture("./assets/helmsman.png");

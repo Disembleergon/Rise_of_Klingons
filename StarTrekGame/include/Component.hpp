@@ -3,18 +3,17 @@
 
 #include <SFML/Graphics.hpp>
 
-// abstract class for game scripts
-class GameScript
+class Component
 {
 public:
-    GameScript(sf::RenderWindow& window)
+    Component(sf::RenderWindow& window)
         : m_window(window) {
         // EMPTY
     };
 
-    GameScript() = delete;
+    Component() = delete;
 
-    virtual ~GameScript() = default;
+    virtual ~Component() = default;
     virtual void draw() = 0;
     virtual void update() = 0;
 

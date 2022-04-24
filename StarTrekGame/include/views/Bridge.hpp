@@ -2,10 +2,10 @@
 #define BRIDGE_HPP
 
 #include "../Clickable.hpp"
-#include "../GameScript.hpp"
+#include "../Component.hpp"
 #include "../GameSprite.hpp"
 
-class Bridge final : public GameScript
+class Bridge final : public Component
 {
   public:
     Bridge(sf::RenderWindow &window);
