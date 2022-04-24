@@ -1,7 +1,7 @@
 #ifndef BRIDGE_HPP
 #define BRIDGE_HPP
 
-#include "../Button.hpp"
+#include "../Clickable.hpp"
 #include "../GameScript.hpp"
 #include "../GameSprite.hpp"
 
@@ -14,7 +14,8 @@ class Bridge final : public GameScript
 
   private:
     const GameSprite _bg;
-    Button _helmsman;
+    Clickable _helmsman;
+    Clickable _tacticalOfficer;
 };
 
 #endif
