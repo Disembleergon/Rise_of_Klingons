@@ -2,7 +2,7 @@
 
 Bridge::Bridge(sf::RenderWindow &window)
     : Component(window), _bg{"./assets/bridge.png", {0, 0}, static_cast<sf::Vector2f>(window.getSize())},
-      _helmsman{m_window}, _tacticalOfficer{m_window}
+      _helmsman{m_window, []() {}}, _tacticalOfficer{m_window, []() {}}
 {
     _helmsman.setNewTexture("./assets/helmsman.png");
     _helmsman.setPosition(150, 585);
