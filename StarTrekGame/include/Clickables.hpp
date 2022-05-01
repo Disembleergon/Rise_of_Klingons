@@ -14,14 +14,11 @@ class Clickable : public GameSprite, public Component
     Clickable() = delete;
     Clickable(sf::RenderWindow &window, event_t event);
 
-    virtual void setHitbox(const sf::Vector2f &pos, const sf::Vector2f &size) = 0;
     void update() override;
     void draw() override;
 
   protected:
-    std::unique_ptr<sf::RectangleShape> _hitbox; // nullptr (not initialized), means that texture = hitbox
     event_t _event;
-
     virtual void hoverAnimation(bool hover) = 0;
 };
 
@@ -30,13 +27,12 @@ class OutlineButton final : public Clickable
 {
   public:
     OutlineButton(sf::RenderWindow &, event_t event);
-    void setHitbox(const sf::Vector2f &pos, const sf::Vector2f &size) override;
 
   private:
-    static constexpr int hitboxOutlineThickness = 3;
+    static constexpr int _outlineThickness = 3;
 
     void hoverAnimation(bool hover) override;
-    float _hitboxOpacity{0};
+    float _outlineOpacity{0};
 };
 
 #endif

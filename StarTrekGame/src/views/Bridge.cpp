@@ -5,14 +5,12 @@ Bridge::Bridge(sf::RenderWindow &window)
       _helmsman{m_window, []() {}}, _tacticalOfficer{m_window, []() {}}
 {
     _helmsman.setNewTexture("./assets/helmsman.png");
-    _helmsman.setPosition(150, 585);
-    _helmsman.setSize({600, 600});
-    _helmsman.setHitbox({285, 595}, {280, 550});
+    _helmsman.setPosition(340, 585);
+    _helmsman.setSize({200, 600});
 
     _tacticalOfficer.setNewTexture("./assets/tacticalOfficer.png");
-    _tacticalOfficer.setPosition(1100, 585);
-    _tacticalOfficer.setSize({600, 600});
-    _tacticalOfficer.setHitbox({1240, 595}, {275, 550});
+    _tacticalOfficer.setPosition(1270, 585);
+    _tacticalOfficer.setSize({200, 600});
 }
 
 void Bridge::update()
