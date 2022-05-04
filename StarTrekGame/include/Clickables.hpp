@@ -12,7 +12,9 @@ class Clickable : public GameSprite, public Component
     using event_t = std::function<void(void)>;
 
     Clickable() = delete;
-    Clickable(sf::RenderWindow &window, event_t event);
+    Clickable(sf::RenderWindow &window);
+
+    void setClickEvent(std::function<void(void)>);
 
     void update() override;
     void draw() override;
@@ -26,7 +28,7 @@ class Clickable : public GameSprite, public Component
 class OutlineButton final : public Clickable
 {
   public:
-    OutlineButton(sf::RenderWindow &, event_t event);
+    OutlineButton(sf::RenderWindow &);
 
   private:
     static constexpr int _outlineThickness = 3;

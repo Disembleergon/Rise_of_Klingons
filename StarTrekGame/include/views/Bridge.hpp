@@ -5,6 +5,8 @@
 #include "../Component.hpp"
 #include "../GameSprite.hpp"
 
+namespace views
+{
 class Bridge final : public Component
 {
   public:
@@ -18,4 +20,5 @@ class Bridge final : public Component
     OutlineButton _tacticalOfficer;
 };
 
+} // namespace views
 #endif

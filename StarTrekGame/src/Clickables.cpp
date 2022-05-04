@@ -3,8 +3,13 @@
 
 // ----- clickable -----
 
-Clickable::Clickable(sf::RenderWindow &window, event_t event) : Component(window), _event{event}
+Clickable::Clickable(sf::RenderWindow &window) : Component(window)
 {
+}
+
+void Clickable::setClickEvent(std::function<void(void)> event)
+{
+    _event = event;
 }
 
 void Clickable::update()
@@ -27,7 +32,7 @@ void Clickable::draw()
 
 // ----- outline button -----
 
-OutlineButton::OutlineButton(sf::RenderWindow &window, event_t event) : Clickable(window, event)
+OutlineButton::OutlineButton(sf::RenderWindow &window) : Clickable(window)
 {
     setOutlineThickness(_outlineThickness);
     setOutlineColor(sf::Color::Transparent);

@@ -1,6 +1,9 @@
 #include "../include/Game.hpp"
 #include "../include/utils/Time.hpp"
 
+// static member variable
+View Game::currentView = View::BRIDGE;
+
 Game::Game(unsigned int w, unsigned int h, const sf::String &title)
     : m_window{sf::VideoMode{w, h}, title}, _bridge(m_window)
 {
@@ -27,10 +30,16 @@ void Game::run()
         Time::updateDeltaTime();
         handleEvents();
 
-        _bridge.update();
-
         m_window.clear();
-        _bridge.draw();
+
+        switch (currentView)
+        {
+        case View::BRIDGE:
+            _bridge.update();
+            _bridge.draw();
+            break;
+        }
+
         m_window.display();
     }
 }

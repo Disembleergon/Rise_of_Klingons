@@ -4,17 +4,27 @@
 #include "views/Bridge.hpp"
 #include <SFML/Graphics.hpp>
 
+enum class View
+{
+    BRIDGE,
+    HELMSMAN,
+    TACTICAL_OFFICER
+};
+
 class Game
 {
   public:
     Game(unsigned int w, unsigned int h, const sf::String &title);
     void run();
 
-  private:
+    static View currentView; // default = View::BRIDGE
+
+  protected:
     sf::RenderWindow m_window;
     void handleEvents();
 
-    Bridge _bridge;
+  private:
+    views::Bridge _bridge;
 };
 
 #endif
