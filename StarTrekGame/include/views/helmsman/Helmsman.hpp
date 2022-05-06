@@ -1,9 +1,10 @@
 #ifndef HELMSMAN_HPP
 #define HELMSMAN_HPP
 
-#include "../Clickables.hpp"
-#include "../Component.hpp"
-#include "../GameSprite.hpp"
+#include "../../Clickables.hpp"
+#include "../../Component.hpp"
+#include "../../GameSprite.hpp"
+#include "Starmap.hpp"
 
 namespace views
 {
@@ -19,6 +20,8 @@ class Helmsman final : public Component
   private:
     const GameSprite _panel;
     Clickable _returnButton;
+
+    Starmap _starmap;
 };
 
 } // namespace views

@@ -1,9 +1,9 @@
-#include "../../include/views/Helmsman.hpp"
+#include "../../include/views/helmsman/Helmsman.hpp"
 #include "../../include/Game.hpp"
 
 views::Helmsman::Helmsman(sf::RenderWindow &window)
-    : Component(window),
-      _panel("./assets/panel.png", {0, 0}, static_cast<sf::Vector2f>(window.getSize())), _returnButton{m_window}
+    : Component(window), _panel("./assets/panel.png", {0, 0}, static_cast<sf::Vector2f>(window.getSize())),
+      _returnButton{m_window}, _starmap{m_window, {650, 180}}
 {
     _returnButton.setNewTexture("./assets/controls/returnButton.png");
     _returnButton.setPosition(100, 100);
@@ -14,10 +14,12 @@ views::Helmsman::Helmsman(sf::RenderWindow &window)
 void views::Helmsman::update()
 {
     _returnButton.update();
+    _starmap.update();
 }
 
 void views::Helmsman::draw()
 {
     m_window.draw(_panel);
     _returnButton.draw();
+    _starmap.draw();
 }

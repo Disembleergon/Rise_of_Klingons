@@ -2,7 +2,7 @@
 #define GAME_HPP
 
 #include "views/Bridge.hpp"
-#include "views/Helmsman.hpp"
+#include "views/helmsman/Helmsman.hpp"
 #include <SFML/Graphics.hpp>
 
 enum class View
