@@ -5,7 +5,6 @@
 #include "GameSprite.hpp"
 #include <functional>
 
-// abstract
 class Clickable : public GameSprite, public Component
 {
   public:
@@ -21,7 +20,9 @@ class Clickable : public GameSprite, public Component
 
   protected:
     event_t _event;
-    virtual void hoverAnimation(bool hover) = 0;
+    virtual void hoverAnimation(bool hover){
+        // EMPTY
+    };
 };
 
 // outline on hover

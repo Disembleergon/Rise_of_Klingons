@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include "views/Bridge.hpp"
+#include "views/Helmsman.hpp"
 #include <SFML/Graphics.hpp>
 
 enum class View
@@ -25,6 +26,7 @@ class Game
 
   private:
     views::Bridge _bridge;
+    views::Helmsman _helmsman;
 };
 
 #endif

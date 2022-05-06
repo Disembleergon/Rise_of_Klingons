@@ -5,7 +5,7 @@
 View Game::currentView = View::BRIDGE;
 
 Game::Game(unsigned int w, unsigned int h, const sf::String &title)
-    : m_window{sf::VideoMode{w, h}, title}, _bridge(m_window)
+    : m_window{sf::VideoMode{w, h}, title}, _bridge(m_window), _helmsman(m_window)
 {
     m_window.setFramerateLimit(60);
     m_window.setVerticalSyncEnabled(true);
@@ -37,6 +37,10 @@ void Game::run()
         case View::BRIDGE:
             _bridge.update();
             _bridge.draw();
+            break;
+        case View::HELMSMAN:
+            _helmsman.update();
+            _helmsman.draw();
             break;
         }
 
