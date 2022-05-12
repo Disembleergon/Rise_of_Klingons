@@ -8,13 +8,17 @@ views::Helmsman::Helmsman(sf::RenderWindow &window)
     _returnButton.setNewTexture("./assets/controls/returnButton.png");
     _returnButton.setPosition(100, 100);
     _returnButton.setSize({100, 100});
-    _returnButton.setClickEvent([]() { Game::currentView = View::BRIDGE; });
 }
 
 void views::Helmsman::update()
 {
     _returnButton.update();
     _starmap.update();
+
+    if (_returnButton.clicked())
+    {
+        Game::currentView = View::BRIDGE;
+    }
 }
 
 void views::Helmsman::draw()

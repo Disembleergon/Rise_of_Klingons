@@ -7,22 +7,18 @@ Clickable::Clickable(sf::RenderWindow &window) : Component(window)
 {
 }
 
-void Clickable::setClickEvent(std::function<void(void)> event)
-{
-    _event = event;
-}
-
 void Clickable::update()
 {
     if (getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window))))
     {
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-            _event();
-
+        _clicked = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
         hoverAnimation(true);
     }
     else
+    {
         hoverAnimation(false);
+        _clicked = false;
+    }
 }
 
 void Clickable::draw()

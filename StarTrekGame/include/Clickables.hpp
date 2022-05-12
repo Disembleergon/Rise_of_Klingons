@@ -3,23 +3,23 @@
 
 #include "Component.hpp"
 #include "GameSprite.hpp"
-#include <functional>
 
 class Clickable : public GameSprite, public Component
 {
   public:
-    using event_t = std::function<void(void)>;
-
     Clickable() = delete;
     Clickable(sf::RenderWindow &window);
 
-    void setClickEvent(std::function<void(void)>);
+    bool clicked() const
+    {
+        return _clicked;
+    }
 
     void update() override;
     void draw() override;
 
   protected:
-    event_t _event;
+    bool _clicked{false};
     virtual void hoverAnimation(bool hover){
         // EMPTY
     };
