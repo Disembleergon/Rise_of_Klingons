@@ -1,4 +1,5 @@
 #include "../../include/views/helmsman/Starmap.hpp"
+#include <algorithm>
 #include <random>
 
 Starmap::Starmap(sf::RenderWindow &window, const sf::Vector2f &pos)
@@ -12,6 +13,22 @@ void Starmap::update()
     for (starmapbutton_ptr &btn : _starmapButtons)
     {
         btn->update();
+        if (btn->clicked())
+        {
+            btn->setToggled(true);
+
+            // untoggle all buttons except the one that was clicked
+            for (starmapbutton_ptr &b : _starmapButtons)
+            {
+                if (b == btn)
+                    continue;
+                b->setToggled(false);
+            }
+        }
+        else
+        {
+            btn->toggledSinceCurrentClick = false;
+        }
     }
 }
 
@@ -34,6 +51,12 @@ void Starmap::generateButtons()
     static constexpr int SEED = 11011121;
     const auto galaxyPos = _galaxyBG.getPosition();
 
+    TextureLoader::texture_ptr systemTexture = std::make_shared<sf::Texture>();
+    TextureLoader::loadTexture(systemTexture, "./assets/controls/starmapButton.png");
+
+    TextureLoader::texture_ptr toggledSystemTexture = std::make_shared<sf::Texture>();
+    TextureLoader::loadTexture(toggledSystemTexture, "./assets/controls/starmapButton_toggled.png");
+
     // always producing the same pattern
     std::mt19937 engine{SEED};
     std::uniform_real_distribution<float> x_dist{galaxyPos.x, galaxyPos.x + _starmapWidth - BUTTON_SIZE};
@@ -41,11 +64,11 @@ void Starmap::generateButtons()
 
     for (int i = 0; i < SYSTEM_COUNT; ++i)
     {
-        starmapbutton_ptr btn = std::make_unique<Clickable>(m_window);
+        // configure button
+        starmapbutton_ptr btn = std::make_unique<ToggleButton>(m_window, systemTexture, toggledSystemTexture);
         const sf::Vector2f btnPos{x_dist(engine), y_dist(engine)};
         btn->setPosition(btnPos);
         btn->setSize({BUTTON_SIZE, BUTTON_SIZE});
-        btn->setNewTexture("./assets/controls/starmapButton.png");
 
         _starmapButtons.push_back(std::move(btn));
     }

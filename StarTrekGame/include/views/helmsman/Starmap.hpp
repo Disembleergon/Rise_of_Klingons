@@ -24,7 +24,7 @@ class Starmap final : public Component
 
     const GameSprite _galaxyBG;
 
-    using starmapbutton_ptr = std::unique_ptr<Clickable>;
+    using starmapbutton_ptr = std::unique_ptr<ToggleButton>;
     std::vector<starmapbutton_ptr> _starmapButtons;
 };
 

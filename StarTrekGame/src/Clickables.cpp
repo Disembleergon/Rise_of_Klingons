@@ -50,3 +50,27 @@ void OutlineButton::hoverAnimation(bool hover)
         _outlineOpacity = std::max(0.0f, _outlineOpacity - animationDuration * Time::deltaTime);
     }
 }
+
+// ----- toggle button -----
+
+ToggleButton::ToggleButton(sf::RenderWindow &window, const TextureLoader::texture_ptr &texture1,
+                           const TextureLoader::texture_ptr &texture2)
+    : OutlineButton(window), _texture1{texture1}, _texture2{texture2}
+{
+    setTexture(_texture1.get());
+}
+
+void ToggleButton::toggle()
+{
+    setToggled(!_toggled);
+}
+
+void ToggleButton::setToggled(bool state)
+{
+    if (toggledSinceCurrentClick) // only toggle on second click (one click =
+        return;                   // holding down mouse button -> flashy)
+
+    toggledSinceCurrentClick = true;
+    _toggled = state;
+    setTexture(_toggled ? _texture2.get() : _texture1.get());
+}

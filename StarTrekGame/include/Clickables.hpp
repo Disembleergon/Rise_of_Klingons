@@ -3,6 +3,7 @@
 
 #include "Component.hpp"
 #include "GameSprite.hpp"
+#include "utils/TextureLoader.hpp"
 
 class Clickable : public GameSprite, public Component
 {
@@ -26,7 +27,7 @@ class Clickable : public GameSprite, public Component
 };
 
 // outline on hover
-class OutlineButton final : public Clickable
+class OutlineButton : public Clickable
 {
   public:
     OutlineButton(sf::RenderWindow &);
@@ -36,6 +37,22 @@ class OutlineButton final : public Clickable
 
     void hoverAnimation(bool hover) override;
     float _outlineOpacity{0};
+};
+
+class ToggleButton final : public OutlineButton
+{
+  public:
+    ToggleButton(sf::RenderWindow &window, const TextureLoader::texture_ptr &texture1,
+                 const TextureLoader::texture_ptr &texture2);
+
+    void toggle();
+    void setToggled(bool state);
+    bool toggledSinceCurrentClick{false}; // take a look at toggle()
+
+  private:
+    const TextureLoader::texture_ptr _texture1;
+    const TextureLoader::texture_ptr _texture2;
+    bool _toggled{false};
 };
 
 #endif
