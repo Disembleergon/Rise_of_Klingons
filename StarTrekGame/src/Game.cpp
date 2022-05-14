@@ -1,5 +1,5 @@
 #include "../include/Game.hpp"
-#include "../include/utils/Time.hpp"
+#include "../include/framework/utils/Time.hpp"
 
 // static member variable
 View Game::currentView = View::BRIDGE;

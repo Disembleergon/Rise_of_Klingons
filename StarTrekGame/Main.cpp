@@ -1,5 +1,5 @@
 #include "./include/Game.hpp"
-#include "include/utils/ErrorHandling.hpp"
+#include "include/framework/utils/ErrorHandling.hpp"
 
 int main()
 {

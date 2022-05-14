@@ -1,9 +1,9 @@
 #ifndef STARMAP_HPP
 #define STARMAP_HPP
 
-#include "../../Clickables.hpp"
-#include "../../Component.hpp"
-#include "../../GameSprite.hpp"
+#include "../../framework/Clickables.hpp"
+#include "../../framework/Component.hpp"
+#include "../../framework/GameSprite.hpp"
 
 class Starmap final : public Component
 {
