@@ -13,13 +13,17 @@ void Slider::update()
 {
     const auto mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window));
 
-    _dragging = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
-    if (!_dragging)
+    if (!sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+    {
+        _dragging = false;
         return;
+    }
 
     bool knobNotDragged = !_knob.getGlobalBounds().contains(mousePos) && !_dragging;
     if (knobNotDragged)
         return;
+
+    _dragging = true;
 
     // mouse not hovering over slider -> out of bound
     if (!_trail.getGlobalBounds().contains(mousePos))
