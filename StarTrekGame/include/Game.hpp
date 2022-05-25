@@ -1,7 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "views/Bridge.hpp"
+#include "views/bridge/Bridge.hpp"
 #include "views/helmsman/Helmsman.hpp"
 #include <SFML/Graphics.hpp>
 

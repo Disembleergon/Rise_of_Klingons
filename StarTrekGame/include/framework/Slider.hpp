@@ -25,7 +25,7 @@ class Slider : public Component
 
     void updateKnobPos();
 
-    inline float value() const
+    [[nodiscard]] inline float value() const
     {
         return _value;
     }

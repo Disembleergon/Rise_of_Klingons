@@ -1,10 +1,8 @@
 #include "../../include/views/helmsman/Starmap.hpp"
-#include <algorithm>
 #include <random>
 
 Starmap::Starmap(sf::RenderWindow &window, const sf::Vector2f &pos)
-    : Component(window), _galaxyBG{"./assets/galaxy.png", pos, {_starmapWidth, _starmapHeight}},
-      _warpslider{window, std::move(_warpsliderConfig)}
+    : Component(window), _galaxyBG{"./assets/galaxy.png", pos, {_starmapWidth, _starmapHeight}}
 {
     generateButtons();
 }
@@ -32,8 +30,6 @@ void Starmap::update()
             btn->toggledSinceCurrentClick = false;
         }
     }
-
-    _warpslider.update();
 }
 
 void Starmap::draw()
@@ -44,8 +40,6 @@ void Starmap::draw()
     {
         btn->draw();
     }
-
-    _warpslider.draw();
 }
 
 // --- private / protected ---
