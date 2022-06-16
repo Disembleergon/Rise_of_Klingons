@@ -11,8 +11,9 @@ Slider::Slider(sf::RenderWindow &window, const SliderConfig &&config)
 
 void Slider::update()
 {
-    const auto mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window));
+    updateKnobPos();
 
+    const auto mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window));
     if (!sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
     {
         _dragging = false;
@@ -32,8 +33,6 @@ void Slider::update()
     const auto trailEndY = _trail.getPosition().y + _trail.getSize().y;
     const auto mouseYRelative = trailEndY - mousePos.y;
     _value = mouseYRelative / _trail.getSize().y;
-
-    updateKnobPos();
 }
 
 void Slider::draw()

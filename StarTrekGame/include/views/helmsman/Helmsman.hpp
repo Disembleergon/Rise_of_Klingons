@@ -18,6 +18,11 @@ class Helmsman final : public Component
     void update() override;
     void draw() override;
 
+    void updateStarshipPositionOnStarmap()
+    {
+        _starmap.updateStarshipPosition();
+    }
+
   private:
     const GameSprite _panel;
     Clickable _returnButton;

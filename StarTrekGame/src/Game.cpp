@@ -5,7 +5,8 @@
 View Game::currentView = View::BRIDGE;
 
 Game::Game(unsigned int w, unsigned int h, const sf::String &title)
-    : m_window{sf::VideoMode{w, h}, title, sf::Style::Titlebar | sf::Style::Close}, _bridge(m_window), _helmsman(m_window)
+    : m_window{sf::VideoMode{w, h}, title, sf::Style::Titlebar | sf::Style::Close}, _bridge(m_window),
+      _helmsman(m_window)
 {
     m_window.setFramerateLimit(60);
     m_window.setVerticalSyncEnabled(true);
@@ -29,9 +30,12 @@ void Game::run()
     {
         Time::updateDeltaTime();
         handleEvents();
-
         m_window.clear();
 
+        // things that have to always get updated/drawn
+        _helmsman.updateStarshipPositionOnStarmap();
+
+        // update/draw things depending on current view
         switch (currentView)
         {
         case View::BRIDGE:

@@ -24,7 +24,4 @@ class Random
     static std::mt19937_64 engine;
 };
 
-std::random_device Random::rd;
-std::mt19937_64 Random::engine{Random::rd()};
-
 #endif
