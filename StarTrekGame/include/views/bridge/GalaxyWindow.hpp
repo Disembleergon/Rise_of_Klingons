@@ -30,18 +30,20 @@ class GalaxyWindow final : public Component
     static constexpr int NUM_STARS = 100;
 
   public:
-    GalaxyWindow(sf::RenderWindow &window, const sf::Vector2f &windowPos, const sf::Vector2f &windowSize);
+    GalaxyWindow(sf::RenderWindow &window);
 
     void update() override;
     void draw() override;
+    void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
   protected:
+    void generateStars();
     void generateNewStar(float starX, float starY);
 
   private:
-    const sf::Vector2f _windowPos;
-    const sf::Vector2f _windowSize;
-    const sf::Vector2f _windowCenter;
+    sf::Vector2f _windowPos;
+    sf::Vector2f _windowSize;
+    sf::Vector2f _windowCenter;
 
     std::vector<Star::star_ptr> _stars;
 };

@@ -3,13 +3,11 @@
 #include "../../include/Starship.hpp"
 
 views::Helmsman::Helmsman(sf::RenderWindow &window)
-    : Component(window), _panel("./assets/panel.png", {0, 0}, static_cast<sf::Vector2f>(window.getSize())),
-      _returnButton{m_window}, _starmap{m_window, _warpslider, {650, 180}}, _warpslider{window,
-                                                                                        std::move(_warpsliderConfig)}
+    : Component(window), _panel("./assets/panel.png"), _returnButton{m_window}, _starmap{m_window, _warpslider},
+      _warpslider{window, std::move(_warpsliderConfig)}
 {
     _returnButton.setNewTexture("./assets/controls/returnButton.png");
-    _returnButton.setPosition(100, 100);
-    _returnButton.setSize({100, 100});
+    resize(m_window.getSize(), m_window.getSize());
 }
 
 void views::Helmsman::update()
@@ -32,4 +30,16 @@ void views::Helmsman::draw()
     _returnButton.draw();
     _starmap.draw();
     _warpslider.draw();
+}
+
+void views::Helmsman::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+{
+    _panel.setPosition(0, 0);
+    _panel.setSize(static_cast<sf::Vector2f>(newWindowSize));
+
+    _returnButton.setPosition(newWindowSize.x * 0.06f, newWindowSize.y * 0.08f);
+    _returnButton.setSize({newWindowSize.x * 0.05f, newWindowSize.y * 0.07f});
+
+    _starmap.resize(prevWindowSize, newWindowSize);
+    _warpslider.resize(prevWindowSize, newWindowSize);
 }

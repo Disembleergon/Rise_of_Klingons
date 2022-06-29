@@ -22,6 +22,7 @@ class Slider : public Component
 
     void update() override;
     void draw() override;
+    void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
     void updateKnobPos();
 
@@ -39,7 +40,12 @@ class Slider : public Component
     float _value{0.0f};
     bool _dragging{false};
 
-    const GameSprite _trail;
+    // --- relative values, for resizing ---
+    const sf::Vector2f _relTrailPos;
+    const sf::Vector2f _relTrailSize;
+    const sf::Vector2f _relKnobSize;
+
+    GameSprite _trail;
     Clickable _knob;
 };
 

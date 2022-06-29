@@ -4,18 +4,10 @@
 #include "../../include/framework/utils/Time.hpp"
 #include <numbers>
 
-galaxywindow::GalaxyWindow::GalaxyWindow(sf::RenderWindow &window, const sf::Vector2f &windowPos,
-                                         const sf::Vector2f &windowSize)
-    : Component(window), _windowPos{windowPos}, _windowSize{windowSize}, _windowCenter{windowPos.x + windowSize.x / 2,
-                                                                                       windowPos.y + windowSize.y / 2}
+galaxywindow::GalaxyWindow::GalaxyWindow(sf::RenderWindow &window) : Component(window)
 {
-    // -- random stars at first --
-    for (int i = 0; i < NUM_STARS; ++i)
-    {
-        const auto starX = Random::generate_floating_point(_windowPos.x, _windowPos.x + _windowSize.x);
-        const auto starY = Random::generate_floating_point(_windowPos.y, _windowPos.y + _windowSize.y);
-        generateNewStar(starX, starY);
-    }
+    resize(m_window.getSize(), m_window.getSize());
+    generateStars();
 }
 
 void galaxywindow::GalaxyWindow::update()
@@ -60,9 +52,28 @@ void galaxywindow::GalaxyWindow::draw()
 {
     for (const Star::star_ptr &star : _stars)
         m_window.draw(*star);
+}
+void galaxywindow::GalaxyWindow::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+{
+    _windowPos = {newWindowSize.x * 0.1f, newWindowSize.y * 0.07f};
+    _windowSize = {newWindowSize.x * 0.81f, newWindowSize.y * 0.48f};
+    _windowCenter = {_windowPos.x + _windowSize.x * 0.5f, _windowPos.y + _windowSize.y * 0.5f};
+
+    _stars.clear();
+    generateStars();
 };
 
 // ---- private/protected ----
+
+void galaxywindow::GalaxyWindow::generateStars()
+{
+    for (int i = 0; i < NUM_STARS; ++i)
+    {
+        const auto starX = Random::generate_floating_point(_windowPos.x, _windowPos.x + _windowSize.x);
+        const auto starY = Random::generate_floating_point(_windowPos.y, _windowPos.y + _windowSize.y);
+        generateNewStar(starX, starY);
+    }
+}
 
 void galaxywindow::GalaxyWindow::generateNewStar(float starX, float starY)
 {

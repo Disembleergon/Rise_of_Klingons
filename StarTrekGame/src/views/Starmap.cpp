@@ -1,13 +1,14 @@
 #include "../../include/views/helmsman/Starmap.hpp"
+#include "../../include/Game.hpp"
 #include "../../include/Starship.hpp"
 #include "../../include/framework/utils/Random.hpp"
 #include "../../include/framework/utils/Time.hpp"
 
-Starmap::Starmap(sf::RenderWindow &window, Slider &throttleSider, const sf::Vector2f &pos)
-    : Component(window), _throttleSlider{throttleSider},
-      _galaxyBG{"./assets/galaxy.png", pos, {_starmapWidth, _starmapHeight}}, _starship{
-                                                                                  "./assets/starship.png", {}, {30, 60}}
+Starmap::Starmap(sf::RenderWindow &window, Slider &throttleSider)
+    : Component(window),
+      _throttleSlider{throttleSider}, _galaxyBG{"./assets/galaxy.png"}, _starship{"./assets/starship.png", {}, {30, 60}}
 {
+    resize(m_window.getSize(), m_window.getSize());
     generateButtons();
 
     // select random star system and toggle it
@@ -58,6 +59,30 @@ void Starmap::draw()
     m_window.draw(_starship);
 }
 
+void Starmap::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+{
+    _starmapWidth = newWindowSize.x * 0.56f;
+    _starmapHeight = newWindowSize.y * 0.69f;
+
+    const sf::Vector2f prevStarmapSize{_starmapWidth, _starmapHeight};
+    _galaxyBG.setPosition(newWindowSize.x * 0.36f, newWindowSize.y * 0.14f);
+    _galaxyBG.setSize({_starmapWidth, _starmapHeight});
+    _starship.setSize({newWindowSize.x * 0.02f, newWindowSize.y * 0.05f});
+
+    configureButtons();
+
+    // ----- reconfigure starship -----
+    sf::Vector2f starshipSize = _starship.getSize();
+    sf::Vector2f relativeSize{starshipSize.x / prevStarmapSize.x, starshipSize.y / prevStarmapSize.y};
+    starshipSize = {relativeSize.x * _starmapWidth, relativeSize.y * _starmapHeight};
+
+    _starship.setSize(starshipSize);
+    _starship.setOrigin(_starship.getSize().x * 0.5f, _starship.getSize().y * 0.5f);
+
+    if (_currentSystemButton)
+        _starship.setPosition(getStarshipTargetPosition());
+}
+
 void Starmap::updateStarshipPosition()
 {
     sf::Vector2f starshipPos = _starship.getPosition();
@@ -102,31 +127,38 @@ void Starmap::slowDownShip()
     Starship::get().thrust = _throttleSlider.value() * 100.0f;
 }
 
+void Starmap::configureButtons()
+{
+    const sf::Vector2f galaxyPos = _galaxyBG.getPosition();
+    const auto buttonSize = m_window.getSize().x * 0.04f;
+
+    // always producing the same pattern
+    static constexpr int SEED = 11011121;
+    std::mt19937 engine{SEED};
+    std::uniform_real_distribution<float> x_dist{galaxyPos.x, galaxyPos.x + _starmapWidth - buttonSize};
+    std::uniform_real_distribution<float> y_dist{galaxyPos.y, galaxyPos.y + _starmapHeight - buttonSize};
+
+    for (starmapbutton_ptr &btn : _starmapButtons)
+    {
+        const sf::Vector2f btnPos{x_dist(engine), y_dist(engine)};
+        btn->setPosition(btnPos);
+        btn->setSize({buttonSize, buttonSize});
+    }
+}
+
 void Starmap::generateButtons()
 {
-    static constexpr int BUTTON_SIZE = 75;
-    static constexpr int SEED = 11011121;
-    const auto galaxyPos = _galaxyBG.getPosition();
-
     TextureLoader::texture_ptr systemTexture = std::make_shared<sf::Texture>();
     TextureLoader::loadTexture(systemTexture, "./assets/controls/starmapButton.png");
 
     TextureLoader::texture_ptr toggledSystemTexture = std::make_shared<sf::Texture>();
     TextureLoader::loadTexture(toggledSystemTexture, "./assets/controls/starmapButton_toggled.png");
 
-    // always producing the same pattern
-    std::mt19937 engine{SEED};
-    std::uniform_real_distribution<float> x_dist{galaxyPos.x, galaxyPos.x + _starmapWidth - BUTTON_SIZE};
-    std::uniform_real_distribution<float> y_dist{galaxyPos.y, galaxyPos.y + _starmapHeight - BUTTON_SIZE};
-
     for (int i = 0; i < SYSTEM_COUNT; ++i)
     {
-        // configure button
         starmapbutton_ptr btn = std::make_unique<ToggleButton>(m_window, systemTexture, toggledSystemTexture);
-        const sf::Vector2f btnPos{x_dist(engine), y_dist(engine)};
-        btn->setPosition(btnPos);
-        btn->setSize({BUTTON_SIZE, BUTTON_SIZE});
-
         _starmapButtons.push_back(std::move(btn));
     }
+
+    configureButtons();
 }

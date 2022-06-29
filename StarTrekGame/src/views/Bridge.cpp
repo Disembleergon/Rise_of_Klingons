@@ -2,16 +2,13 @@
 #include "../../include/Game.hpp"
 
 views::Bridge::Bridge(sf::RenderWindow &window)
-    : Component(window), _bg{"./assets/bridge.png", {0, 0}, static_cast<sf::Vector2f>(window.getSize())},
-      _helmsman{m_window}, _tacticalOfficer{m_window}, _galaxyWindow{window, {180, 87}, {1450, 630}}
+    : Component(window), _bg{"./assets/bridge.png"}, _helmsman{m_window}, _tacticalOfficer{m_window}, _galaxyWindow{
+                                                                                                          window}
 {
     _helmsman.setNewTexture("./assets/helmsman.png");
-    _helmsman.setPosition(340, 585);
-    _helmsman.setSize({200, 600});
-
     _tacticalOfficer.setNewTexture("./assets/tacticalOfficer.png");
-    _tacticalOfficer.setPosition(1270, 585);
-    _tacticalOfficer.setSize({200, 600});
+
+    resize(m_window.getSize(), m_window.getSize());
 }
 
 void views::Bridge::update()
@@ -36,4 +33,18 @@ void views::Bridge::draw()
     m_window.draw(_bg);
     _helmsman.draw();
     _tacticalOfficer.draw();
+}
+
+void views::Bridge::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+{
+    const sf::Vector2f crewmemberSize{newWindowSize.x * 0.11f, newWindowSize.y * 0.46f};
+    const auto crewMemberY = newWindowSize.y * 0.45f;
+
+    _helmsman.setPosition(newWindowSize.x * 0.18f, crewMemberY);
+    _helmsman.setSize(crewmemberSize);
+    _tacticalOfficer.setPosition(newWindowSize.x * 0.71f, crewMemberY);
+    _tacticalOfficer.setSize(crewmemberSize);
+
+    _bg.setSize(static_cast<sf::Vector2f>(newWindowSize));
+    _galaxyWindow.resize(prevWindowSize, newWindowSize);
 }

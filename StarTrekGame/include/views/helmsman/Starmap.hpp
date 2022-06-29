@@ -5,16 +5,20 @@
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
 #include "../../framework/Slider.hpp"
+#include <random>
 
 class Starmap final : public Component
 {
+    using starmapbutton_ptr = std::unique_ptr<ToggleButton>;
+
   public:
-    Starmap(sf::RenderWindow &, Slider &throttleSider, const sf::Vector2f &pos = {});
+    Starmap(sf::RenderWindow &, Slider &throttleSider);
     Starmap(const Starmap &) = delete;
     Starmap &operator=(const Starmap &) = delete;
 
     void update() override;
     void draw() override;
+    void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
     void updateStarshipPosition();
 
@@ -24,18 +28,17 @@ class Starmap final : public Component
     sf::Vector2f getStarshipTargetPosition();
     void slowDownShip();
 
+    void configureButtons(); // repositioning & resizing buttons (on window resize event)
     void generateButtons();
 
   private:
-    static constexpr int _starmapWidth{1000};
-    static constexpr int _starmapHeight{900};
-    const GameSprite _galaxyBG;
+    float _starmapWidth;
+    float _starmapHeight;
+    GameSprite _galaxyBG;
 
     static constexpr int SYSTEM_COUNT = 7;
-
-    using starmapbutton_ptr = std::unique_ptr<ToggleButton>;
     std::vector<starmapbutton_ptr> _starmapButtons;
-    ToggleButton *_currentSystemButton;
+    ToggleButton *_currentSystemButton{};
 
     GameSprite _starship;
 };

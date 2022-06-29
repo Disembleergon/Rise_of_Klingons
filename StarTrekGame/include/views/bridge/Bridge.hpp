@@ -14,9 +14,10 @@ class Bridge final : public Component
     Bridge(sf::RenderWindow &window);
     void update() override;
     void draw() override;
+    void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
   private:
-    const GameSprite _bg;
+    GameSprite _bg;
     galaxywindow::GalaxyWindow _galaxyWindow;
 
     OutlineButton _helmsman;

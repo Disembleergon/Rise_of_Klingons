@@ -3,9 +3,13 @@
 
 int main()
 {
+    const auto screenWidth = sf::VideoMode::getDesktopMode().width;
+    const auto windowWidth = static_cast<unsigned int>(screenWidth * 0.6f);
+    const auto windowHeight = static_cast<unsigned int>(windowWidth * Game::ASPECT_RATIO);
+
     try
     {
-        Game window{1800, 1300, "Star Trek Game"};
+        Game window{windowWidth, windowHeight, "Star Trek Game"};
         window.run();
     }
     catch (const asset_not_found &e)

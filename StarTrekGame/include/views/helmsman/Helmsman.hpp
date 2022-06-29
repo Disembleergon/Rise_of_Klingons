@@ -17,6 +17,7 @@ class Helmsman final : public Component
 
     void update() override;
     void draw() override;
+    void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
     void updateStarshipPositionOnStarmap()
     {
@@ -24,7 +25,7 @@ class Helmsman final : public Component
     }
 
   private:
-    const GameSprite _panel;
+    GameSprite _panel;
     Clickable _returnButton;
     Starmap _starmap;
 
