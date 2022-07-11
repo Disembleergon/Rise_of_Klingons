@@ -13,7 +13,7 @@ namespace views
 class Helmsman final : public Component
 {
   public:
-    Helmsman(sf::RenderWindow &);
+    Helmsman(sf::RenderWindow &, Bridge &);
 
     void update() override;
     void draw() override;

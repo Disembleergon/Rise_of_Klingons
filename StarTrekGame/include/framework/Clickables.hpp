@@ -39,19 +39,19 @@ class OutlineButton : public Clickable
     float _outlineOpacity{0};
 };
 
-class ToggleButton final : public OutlineButton
+class ToggleButton : public OutlineButton
 {
   public:
-    ToggleButton(sf::RenderWindow &window, const TextureLoader::texture_ptr &texture1,
-                 const TextureLoader::texture_ptr &texture2);
+    ToggleButton(sf::RenderWindow &window, const TextureLoader::shared_texture_ptr &texture1,
+                 const TextureLoader::shared_texture_ptr &texture2);
 
     void toggle();
     void setToggled(bool state);
     bool toggledSinceCurrentClick{false}; // take a look at toggle()
 
   private:
-    const TextureLoader::texture_ptr _texture1;
-    const TextureLoader::texture_ptr _texture2;
+    const TextureLoader::shared_texture_ptr _texture1;
+    const TextureLoader::shared_texture_ptr _texture2;
     bool _toggled{false};
 };
 

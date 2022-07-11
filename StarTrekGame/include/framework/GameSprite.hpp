@@ -7,8 +7,11 @@
 class GameSprite : public sf::RectangleShape
 {
   public:
-    GameSprite() = default;
+    GameSprite() : _texture{std::make_unique<sf::Texture>()}
+    {
+    }
     GameSprite(const sf::String &texturePath, const sf::Vector2f &pos = {}, const sf::Vector2f &size = {})
+        : _texture{std::make_unique<sf::Texture>()}
     {
         setPosition(pos);
         setSize(size);
@@ -19,11 +22,11 @@ class GameSprite : public sf::RectangleShape
     void setNewTexture(const sf::String &tp)
     {
         TextureLoader::loadTexture(_texture, tp);
-        setTexture(&_texture);
+        setTexture(_texture.get());
     }
 
   private:
-    sf::Texture _texture;
+    TextureLoader::unique_texture_ptr _texture;
 };
 
 #endif

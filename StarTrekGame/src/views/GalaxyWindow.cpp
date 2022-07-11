@@ -32,8 +32,8 @@ void galaxywindow::GalaxyWindow::update()
         star->setFillColor(starClr);
 
         // erase stars out of sight
-        const bool outOfSight = starPos.x < _windowPos.x || starPos.x > _windowPos.x + _windowSize.x ||
-                                starPos.y < _windowPos.y || starPos.y > _windowPos.y + _windowSize.y;
+        const bool outOfSight = starPos.x < windowPos.x || starPos.x > windowPos.x + windowSize.x ||
+                                starPos.y < windowPos.y || starPos.y > windowPos.y + windowSize.y;
         if (outOfSight)
             _stars.erase(_stars.begin() + i);
         else
@@ -55,9 +55,9 @@ void galaxywindow::GalaxyWindow::draw()
 }
 void galaxywindow::GalaxyWindow::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
 {
-    _windowPos = {newWindowSize.x * 0.1f, newWindowSize.y * 0.07f};
-    _windowSize = {newWindowSize.x * 0.81f, newWindowSize.y * 0.48f};
-    _windowCenter = {_windowPos.x + _windowSize.x * 0.5f, _windowPos.y + _windowSize.y * 0.5f};
+    windowPos = {newWindowSize.x * 0.1f, newWindowSize.y * 0.07f};
+    windowSize = {newWindowSize.x * 0.81f, newWindowSize.y * 0.48f};
+    _windowCenter = {windowPos.x + windowSize.x * 0.5f, windowPos.y + windowSize.y * 0.5f};
 
     _stars.clear();
     generateStars();
@@ -69,8 +69,8 @@ void galaxywindow::GalaxyWindow::generateStars()
 {
     for (int i = 0; i < NUM_STARS; ++i)
     {
-        const auto starX = Random::generate_floating_point(_windowPos.x, _windowPos.x + _windowSize.x);
-        const auto starY = Random::generate_floating_point(_windowPos.y, _windowPos.y + _windowSize.y);
+        const auto starX = Random::generate_floating_point(windowPos.x, windowPos.x + windowSize.x);
+        const auto starY = Random::generate_floating_point(windowPos.y, windowPos.y + windowSize.y);
         generateNewStar(starX, starY);
     }
 }

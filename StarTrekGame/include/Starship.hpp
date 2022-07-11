@@ -1,6 +1,11 @@
 #ifndef STARSHIP_HPP
 #define STARSHIP_HPP
 
+struct SystemData
+{
+    int enemyCount{0};
+};
+
 /*
  * Singleton
  */
@@ -16,6 +21,7 @@ class Starship final
 
     float thrust{0.0f};
     float health{0.0f};
+    SystemData currentSystemData;
 
   private:
     Starship() = default;

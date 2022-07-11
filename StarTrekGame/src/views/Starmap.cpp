@@ -4,9 +4,9 @@
 #include "../../include/framework/utils/Random.hpp"
 #include "../../include/framework/utils/Time.hpp"
 
-Starmap::Starmap(sf::RenderWindow &window, Slider &throttleSider)
-    : Component(window),
-      _throttleSlider{throttleSider}, _galaxyBG{"./assets/galaxy.png"}, _starship{"./assets/starship.png", {}, {30, 60}}
+Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &throttleSider)
+    : Component(window), _throttleSlider{throttleSider}, _bridge{bridge}, _galaxyBG{"./assets/galaxy.png"},
+      _starship{"./assets/starship.png", {}, {30, 60}}
 {
     resize(m_window.getSize(), m_window.getSize());
     generateButtons();
@@ -24,7 +24,7 @@ Starmap::Starmap(sf::RenderWindow &window, Slider &throttleSider)
 void Starmap::update()
 {
     // update starmap buttons
-    for (starmapbutton_ptr &btn : _starmapButtons)
+    for (StarmapButton::starmapbutton_ptr &btn : _starmapButtons)
     {
         btn->update();
         if (btn->clicked())
@@ -33,7 +33,7 @@ void Starmap::update()
             _currentSystemButton = btn.get();
 
             // untoggle all buttons except the one that was clicked
-            for (starmapbutton_ptr &b : _starmapButtons)
+            for (StarmapButton::starmapbutton_ptr &b : _starmapButtons)
             {
                 if (b == btn)
                     continue;
@@ -51,7 +51,7 @@ void Starmap::draw()
 {
     m_window.draw(_galaxyBG);
 
-    for (starmapbutton_ptr &btn : _starmapButtons)
+    for (StarmapButton::starmapbutton_ptr &btn : _starmapButtons)
     {
         btn->draw();
     }
@@ -93,6 +93,8 @@ void Starmap::updateStarshipPosition()
     const auto distance = std::hypot(shipToTargetX, shipToTargetY);
     if (distance <= 1) // starship already at target
         slowDownShip();
+    else
+        _bridge.clearEnemyVec();
 
     // move ship to target
     static constexpr float speedFactor = 0.35f;
@@ -118,7 +120,11 @@ sf::Vector2f Starmap::getStarshipTargetPosition()
 void Starmap::slowDownShip()
 {
     if (_throttleSlider.value() == 0.0f)
+    {
+        Starship::get().currentSystemData = _currentSystemButton->data;
+        _bridge.onSystemArrival();
         return;
+    }
 
     static constexpr float SPEED_REDUCTION = 1.5f;
 
@@ -138,7 +144,7 @@ void Starmap::configureButtons()
     std::uniform_real_distribution<float> x_dist{galaxyPos.x, galaxyPos.x + _starmapWidth - buttonSize};
     std::uniform_real_distribution<float> y_dist{galaxyPos.y, galaxyPos.y + _starmapHeight - buttonSize};
 
-    for (starmapbutton_ptr &btn : _starmapButtons)
+    for (StarmapButton::starmapbutton_ptr &btn : _starmapButtons)
     {
         const sf::Vector2f btnPos{x_dist(engine), y_dist(engine)};
         btn->setPosition(btnPos);
@@ -148,15 +154,16 @@ void Starmap::configureButtons()
 
 void Starmap::generateButtons()
 {
-    TextureLoader::texture_ptr systemTexture = std::make_shared<sf::Texture>();
+    TextureLoader::shared_texture_ptr systemTexture = std::make_shared<sf::Texture>();
     TextureLoader::loadTexture(systemTexture, "./assets/controls/starmapButton.png");
 
-    TextureLoader::texture_ptr toggledSystemTexture = std::make_shared<sf::Texture>();
+    TextureLoader::shared_texture_ptr toggledSystemTexture = std::make_shared<sf::Texture>();
     TextureLoader::loadTexture(toggledSystemTexture, "./assets/controls/starmapButton_toggled.png");
 
     for (int i = 0; i < SYSTEM_COUNT; ++i)
     {
-        starmapbutton_ptr btn = std::make_unique<ToggleButton>(m_window, systemTexture, toggledSystemTexture);
+        StarmapButton::starmapbutton_ptr btn =
+            std::make_unique<StarmapButton>(m_window, systemTexture, toggledSystemTexture);
         _starmapButtons.push_back(std::move(btn));
     }
 

@@ -36,15 +36,15 @@ class GalaxyWindow final : public Component
     void draw() override;
     void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
+    sf::Vector2f windowPos;
+    sf::Vector2f windowSize;
+
   protected:
     void generateStars();
     void generateNewStar(float starX, float starY);
 
   private:
-    sf::Vector2f _windowPos;
-    sf::Vector2f _windowSize;
     sf::Vector2f _windowCenter;
-
     std::vector<Star::star_ptr> _stars;
 };
 } // namespace galaxywindow

@@ -1,5 +1,6 @@
 #include "../../include/views/bridge/Bridge.hpp"
 #include "../../include/Game.hpp"
+#include "../../include/framework/utils/Time.hpp"
 
 views::Bridge::Bridge(sf::RenderWindow &window)
     : Component(window), _bg{"./assets/bridge.png"}, _helmsman{m_window}, _tacticalOfficer{m_window}, _galaxyWindow{
@@ -25,11 +26,27 @@ void views::Bridge::update()
     {
         Game::currentView = View::TACTICAL_OFFICER;
     }
+
+    // "flying" animation around the fixed position
+    for (EnemyShip &enemy : _enemies)
+    {
+        const auto fixedPos = enemy.getFixedPosition();
+        const float x = fixedPos.x + std::sin(enemy.moveProgress.x) * EnemyShip::moveFactor;
+        const float y = fixedPos.y + std::sin(enemy.moveProgress.y) * EnemyShip::moveFactor;
+        enemy.setPosition(x, y);
+
+        const auto increment = EnemyShip::moveIncrement * Time::deltaTime;
+        enemy.moveProgress.x += increment;
+        enemy.moveProgress.y += increment;
+    }
 }
 
 void views::Bridge::draw()
 {
     _galaxyWindow.draw();
+    for (const EnemyShip &enemy : _enemies)
+        m_window.draw(enemy);
+
     m_window.draw(_bg);
     _helmsman.draw();
     _tacticalOfficer.draw();
@@ -47,4 +64,57 @@ void views::Bridge::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSi
 
     _bg.setSize(static_cast<sf::Vector2f>(newWindowSize));
     _galaxyWindow.resize(prevWindowSize, newWindowSize);
+
+    for (EnemyShip &enemy : _enemies)
+    {
+        const sf::Vector2f enemyPos = enemy.getPosition();
+        const sf::Vector2f enemySize = enemy.getSize();
+
+        const sf::Vector2f relPos{enemyPos.x / prevWindowSize.x, enemyPos.y / prevWindowSize.y};
+        const sf::Vector2f relSize{enemySize.x / prevWindowSize.x, enemySize.y / prevWindowSize.y};
+        enemy.setFixedPosition(newWindowSize.x * relPos.x, newWindowSize.y * relPos.y);
+        enemy.setSize({newWindowSize.x * relSize.x, newWindowSize.y * relSize.y});
+    }
+}
+
+void views::Bridge::onSystemArrival()
+{
+    SystemData currentSystemData = Starship::get().currentSystemData;
+    if (_lastSystemData.enemyCount == currentSystemData.enemyCount)
+        return;
+
+    // ---- generate new ships ----
+    _enemies.clear();
+    TextureLoader::shared_texture_ptr enemyTexture = std::make_shared<sf::Texture>();
+    TextureLoader::loadTexture(enemyTexture, "./assets/enemy.png");
+
+    const auto windowPos = _galaxyWindow.windowPos;
+    const auto windowSize = _galaxyWindow.windowSize;
+
+    for (int i = 0; i < currentSystemData.enemyCount; ++i)
+    {
+        const auto enemyWidth = Random::generate_floating_point(windowSize.x * 0.05f, windowSize.x * 0.6f);
+        const auto enemyHeight = enemyWidth * 0.58f; // apply aspect ratio
+        const float enemyX =
+            windowPos.x + enemyWidth * 0.5f + (windowSize.x - enemyWidth) * Random::generate_floating_point(0.0f, 1.0f);
+        const float enemyY = windowPos.y + enemyHeight * 0.5f +
+                             (windowSize.y - enemyHeight) * Random::generate_floating_point(0.0f, 1.0f);
+
+        EnemyShip enemy;
+        enemy.setSize({enemyWidth, enemyHeight});
+        enemy.setOrigin({enemy.getLocalBounds().width * 0.5f, enemy.getLocalBounds().height * 0.5f});
+        enemy.setFixedPosition(enemyX, enemyY);
+        enemy.moveProgress.x = Random::generate_floating_point(0.0f, 2.0f);
+        enemy.moveProgress.y = Random::generate_floating_point(0.0f, 2.0f);
+        enemy.setNewTexture(enemyTexture);
+
+        _enemies.push_back(std::move(enemy));
+    }
+
+    _lastSystemData = currentSystemData;
+}
+
+void views::Bridge::clearEnemyVec()
+{
+    _enemies.clear();
 }
