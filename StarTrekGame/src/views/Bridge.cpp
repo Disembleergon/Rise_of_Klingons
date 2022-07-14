@@ -62,17 +62,27 @@ void views::Bridge::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSi
     _tacticalOfficer.setPosition(newWindowSize.x * 0.71f, crewMemberY);
     _tacticalOfficer.setSize(crewmemberSize);
 
+    // for resizing the enemy ships
+    const sf::Vector2f prevGalaxywindowSize = _galaxyWindow.windowSize;
+    const sf::Vector2f prevGalaxywindowPos = _galaxyWindow.windowPos;
+
     _bg.setSize(static_cast<sf::Vector2f>(newWindowSize));
     _galaxyWindow.resize(prevWindowSize, newWindowSize);
 
+    // for resizing the enemy ships (as well)
+    const sf::Vector2f newGalaxywindowSize = _galaxyWindow.windowSize;
+    const sf::Vector2f newGalaxywindowPos = _galaxyWindow.windowPos;
+
     for (EnemyShip &enemy : _enemies)
     {
-        const sf::Vector2f enemyPos = enemy.getPosition();
+        const sf::Vector2f enemyFixedPos = enemy.getFixedPosition();
         const sf::Vector2f enemySize = enemy.getSize();
 
-        const sf::Vector2f relPos{enemyPos.x / prevWindowSize.x, enemyPos.y / prevWindowSize.y};
+        const sf::Vector2f relPos{(enemyFixedPos.x - prevGalaxywindowPos.x) / prevGalaxywindowSize.x,
+                                  (enemyFixedPos.y - prevGalaxywindowPos.y) / prevGalaxywindowSize.y};
         const sf::Vector2f relSize{enemySize.x / prevWindowSize.x, enemySize.y / prevWindowSize.y};
-        enemy.setFixedPosition(newWindowSize.x * relPos.x, newWindowSize.y * relPos.y);
+        enemy.setFixedPosition(newGalaxywindowPos.x + newGalaxywindowSize.x * relPos.x,
+                               newGalaxywindowPos.y + newGalaxywindowSize.y * relPos.y);
         enemy.setSize({newWindowSize.x * relSize.x, newWindowSize.y * relSize.y});
     }
 }
