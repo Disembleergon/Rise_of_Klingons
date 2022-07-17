@@ -45,6 +45,7 @@ void Game::resize()
     // --- update sprites/hitboxes etc. ---
     _bridge.resize(_previousWindowSize, windowSize);
     _helmsman.resize(_previousWindowSize, windowSize);
+    _tacticalOfficer.resize(_previousWindowSize, windowSize);
 
     m_window.setSize(windowSize);
     sf::View newView{sf::FloatRect{0, 0, static_cast<float>(windowSize.x), static_cast<float>(windowSize.y)}};
