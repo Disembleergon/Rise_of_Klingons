@@ -3,6 +3,7 @@
 
 #include "views/bridge/Bridge.hpp"
 #include "views/helmsman/Helmsman.hpp"
+#include "views/tacticalOfficer/TacticalOfficer.hpp"
 #include <SFML/Graphics.hpp>
 
 #define PREFERRED_WINDOW_WIDTH 1800.0f
@@ -34,6 +35,7 @@ class Game
   private:
     views::Bridge _bridge;
     views::Helmsman _helmsman;
+    views::TacticalOfficer _tacticalOfficer;
 };
 
 #endif

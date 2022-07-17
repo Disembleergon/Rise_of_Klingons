@@ -6,7 +6,7 @@ View Game::currentView = View::BRIDGE;
 
 Game::Game(unsigned int w, unsigned int h, const sf::String &title)
     : m_window{sf::VideoMode{w, h}, title, sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close},
-      _bridge(m_window), _helmsman(m_window, _bridge)
+      _bridge(m_window), _helmsman(m_window, _bridge), _tacticalOfficer(m_window)
 {
     m_window.setFramerateLimit(60);
     m_window.setVerticalSyncEnabled(true);
@@ -74,6 +74,10 @@ void Game::run()
         case View::HELMSMAN:
             _helmsman.update();
             _helmsman.draw();
+            break;
+        case View::TACTICAL_OFFICER:
+            _tacticalOfficer.update();
+            _tacticalOfficer.draw();
             break;
         }
 
