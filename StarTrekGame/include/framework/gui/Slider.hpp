@@ -1,9 +1,9 @@
 #ifndef SLIDER_HPP
 #define SLIDER_HPP
 
+#include "../Component.hpp"
+#include "../GameSprite.hpp"
 #include "Clickables.hpp"
-#include "Component.hpp"
-#include "GameSprite.hpp"
 
 struct SliderConfig
 {

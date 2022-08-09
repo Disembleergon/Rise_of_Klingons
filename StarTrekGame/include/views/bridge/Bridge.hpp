@@ -2,7 +2,7 @@
 #define BRIDGE_HPP
 
 #include "../../Starship.hpp"
-#include "../../framework/Clickables.hpp"
+#include "../../framework/gui/Clickables.hpp"
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
 #include "GalaxyWindow.hpp"

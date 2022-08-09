@@ -1,10 +1,10 @@
 #ifndef HELMSMAN_HPP
 #define HELMSMAN_HPP
 
-#include "../../framework/Clickables.hpp"
+#include "../../framework/gui/Clickables.hpp"
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
-#include "../../framework/Slider.hpp"
+#include "../../framework/gui/Slider.hpp"
 #include "Starmap.hpp"
 
 namespace views

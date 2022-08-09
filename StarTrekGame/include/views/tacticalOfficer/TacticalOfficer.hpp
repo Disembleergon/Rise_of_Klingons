@@ -1,7 +1,7 @@
 #ifndef TACTICALOFFICER_HPP
 #define TACTICALOFFICER_HPP
 
-#include "../../framework/Clickables.hpp"
+#include "../../framework/gui/Clickables.hpp"
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
 #include "../../Starship.hpp"

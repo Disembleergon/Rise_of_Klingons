@@ -1,9 +1,9 @@
 #ifndef Clickable_HPP
 #define Clickable_HPP
 
-#include "Component.hpp"
-#include "GameSprite.hpp"
-#include "utils/TextureLoader.hpp"
+#include "../Component.hpp"
+#include "../GameSprite.hpp"
+#include "../utils/TextureLoader.hpp"
 
 class Clickable : public GameSprite, public Component
 {

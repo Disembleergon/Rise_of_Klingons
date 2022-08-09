@@ -2,10 +2,10 @@
 #define STARMAP_HPP
 
 #include "../../Starship.hpp"
-#include "../../framework/Clickables.hpp"
+#include "../../framework/gui/Clickables.hpp"
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
-#include "../../framework/Slider.hpp"
+#include "../../framework/gui/Slider.hpp"
 #include "../../framework/utils/Random.hpp"
 #include "../bridge/Bridge.hpp"
 

@@ -1,4 +1,4 @@
-#include "../../include/framework/Slider.hpp"
+#include "../../include/framework/gui/Slider.hpp"
 #include "../../include/Game.hpp" // for PREFERRED_WINDOW_[...]
 
 Slider::Slider(sf::RenderWindow &window, const SliderConfig &&config)
