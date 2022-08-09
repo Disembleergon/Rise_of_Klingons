@@ -1,13 +1,13 @@
 #ifndef GAMESPRITE_HPP
 #define GAMESPRITE_HPP
 
-#include "utils/TextureLoader.hpp"
+#include "utils/ResourceLoader.hpp"
 #include <SFML/Graphics.hpp>
 
 class GameSprite : public sf::RectangleShape
 {
   public:
-    GameSprite() : _texture{std::make_unique<sf::Texture>()}
+    GameSprite() : _texture(std::make_unique<sf::Texture>())
     {
     }
     GameSprite(const sf::String &texturePath, const sf::Vector2f &pos = {}, const sf::Vector2f &size = {})
@@ -21,12 +21,12 @@ class GameSprite : public sf::RectangleShape
 
     void setNewTexture(const sf::String &tp)
     {
-        TextureLoader::loadTexture(_texture, tp);
+        resources::loadResource<sf::Texture>(_texture.get(), tp);
         setTexture(_texture.get());
     }
 
   private:
-    TextureLoader::unique_texture_ptr _texture;
+    resources::unique_texture_ptr _texture;
 };
 
 #endif

@@ -95,8 +95,8 @@ void views::Bridge::onSystemArrival()
 
     // ---- generate new ships ----
     _enemies.clear();
-    TextureLoader::shared_texture_ptr enemyTexture = std::make_shared<sf::Texture>();
-    TextureLoader::loadTexture(enemyTexture, "./assets/enemy.png");
+    resources::shared_texture_ptr enemyTexture = std::make_shared<sf::Texture>();
+    resources::loadResource<sf::Texture>(enemyTexture.get(), "./assets/enemy.png");
 
     const auto windowPos = _galaxyWindow.windowPos;
     const auto windowSize = _galaxyWindow.windowSize;

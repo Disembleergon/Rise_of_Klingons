@@ -12,8 +12,8 @@
 class StarmapButton final : public ToggleButton
 {
   public:
-    StarmapButton(sf::RenderWindow &window, const TextureLoader::shared_texture_ptr &texture1,
-                  const TextureLoader::shared_texture_ptr &texture2)
+    StarmapButton(sf::RenderWindow &window, const resources::shared_texture_ptr &texture1,
+                  const resources::shared_texture_ptr &texture2)
         : ToggleButton(window, texture1, texture2), data{Random::generate_integral(0, 3)}
     {
     }

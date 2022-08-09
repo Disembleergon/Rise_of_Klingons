@@ -93,11 +93,11 @@ void views::TacticalOfficer::generateEnemyButtons()
 {
     _enemyButtons.clear();
 
-    TextureLoader::shared_texture_ptr untoggledTexture = std::make_shared<sf::Texture>();
-    TextureLoader::loadTexture(untoggledTexture, "./assets/controls/enemyButton_untoggled.png");
+    resources::shared_texture_ptr untoggledTexture = std::make_shared<sf::Texture>();
+    resources::loadResource<sf::Texture>(untoggledTexture.get(), "./assets/controls/enemyButton_untoggled.png");
 
-    TextureLoader::shared_texture_ptr toggledTexture = std::make_shared<sf::Texture>();
-    TextureLoader::loadTexture(toggledTexture, "./assets/controls/enemyButton_toggled.png");
+    resources::shared_texture_ptr toggledTexture = std::make_shared<sf::Texture>();
+    resources::loadResource<sf::Texture>(toggledTexture.get(), "./assets/controls/enemyButton_toggled.png");
 
     const auto enemyCount = Starship::get().currentSystemData.enemyCount;
     const auto SPACE_BETWEEN = _enemyPanel.getSize().x * 0.05f;

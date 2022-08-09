@@ -3,7 +3,7 @@
 
 #include "../Component.hpp"
 #include "../GameSprite.hpp"
-#include "../utils/TextureLoader.hpp"
+#include "../utils/ResourceLoader.hpp"
 
 class Clickable : public GameSprite, public Component
 {
@@ -42,16 +42,16 @@ class OutlineButton : public Clickable
 class ToggleButton : public OutlineButton
 {
   public:
-    ToggleButton(sf::RenderWindow &window, const TextureLoader::shared_texture_ptr &texture1,
-                 const TextureLoader::shared_texture_ptr &texture2);
+    ToggleButton(sf::RenderWindow &window, const resources::shared_texture_ptr &texture1,
+                 const resources::shared_texture_ptr &texture2);
 
     void toggle();
     void setToggled(bool state);
     bool toggledSinceCurrentClick{false}; // take a look at toggle()
 
   private:
-    const TextureLoader::shared_texture_ptr _texture1;
-    const TextureLoader::shared_texture_ptr _texture2;
+    const resources::shared_texture_ptr _texture1;
+    const resources::shared_texture_ptr _texture2;
     bool _toggled{false};
 };
 

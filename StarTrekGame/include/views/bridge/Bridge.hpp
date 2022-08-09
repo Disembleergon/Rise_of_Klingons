@@ -14,7 +14,7 @@ class Bridge final : public Component
     class EnemyShip final : public sf::RectangleShape
     {
       public:
-        void setNewTexture(TextureLoader::shared_texture_ptr &texture)
+        void setNewTexture(resources::shared_texture_ptr &texture)
         {
             _texture = texture;
             setTexture(_texture.get());
@@ -37,7 +37,7 @@ class Bridge final : public Component
         sf::Vector2f moveProgress;
 
       private:
-        TextureLoader::shared_texture_ptr _texture;
+        resources::shared_texture_ptr _texture;
         sf::Vector2f _fixedPos;
     };
 

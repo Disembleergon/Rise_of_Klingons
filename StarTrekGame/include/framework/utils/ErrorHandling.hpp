@@ -6,6 +6,12 @@
 // throwable, MessageBox on catch
 class asset_not_found : public std::exception
 {
+  public:
+    asset_not_found(const std::string &p) : path{p}
+    {
+    }
+
+    const std::string path;
 };
 
 class ErrorHandler

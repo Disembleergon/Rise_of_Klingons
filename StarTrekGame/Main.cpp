@@ -14,6 +14,6 @@ int main()
     }
     catch (const asset_not_found &e)
     {
-        ErrorHandler::showErrorBox("Couldn't find asset(s).");
+        ErrorHandler::showErrorBox("Couldn't find asset(s).\n[ " + e.path + " ]");
     }
 }

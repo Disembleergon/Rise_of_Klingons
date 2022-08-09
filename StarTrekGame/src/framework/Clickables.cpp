@@ -53,8 +53,8 @@ void OutlineButton::hoverAnimation(bool hover)
 
 // ----- toggle button -----
 
-ToggleButton::ToggleButton(sf::RenderWindow &window, const TextureLoader::shared_texture_ptr &texture1,
-                           const TextureLoader::shared_texture_ptr &texture2)
+ToggleButton::ToggleButton(sf::RenderWindow &window, const resources::shared_texture_ptr &texture1,
+                           const resources::shared_texture_ptr &texture2)
     : OutlineButton(window), _texture1{texture1}, _texture2{texture2}
 {
     setTexture(_texture1.get());

@@ -155,11 +155,11 @@ void Starmap::configureButtons()
 
 void Starmap::generateButtons()
 {
-    TextureLoader::shared_texture_ptr systemTexture = std::make_shared<sf::Texture>();
-    TextureLoader::loadTexture(systemTexture, "./assets/controls/starmapButton.png");
+    resources::shared_texture_ptr systemTexture = std::make_shared<sf::Texture>();
+    resources::loadResource<sf::Texture>(systemTexture.get(), "./assets/controls/starmapButton.png");
 
-    TextureLoader::shared_texture_ptr toggledSystemTexture = std::make_shared<sf::Texture>();
-    TextureLoader::loadTexture(toggledSystemTexture, "./assets/controls/starmapButton_toggled.png");
+    resources::shared_texture_ptr toggledSystemTexture = std::make_shared<sf::Texture>();
+    resources::loadResource<sf::Texture>(toggledSystemTexture.get(), "./assets/controls/starmapButton_toggled.png");
 
     for (int i = 0; i < SYSTEM_COUNT; ++i)
     {
