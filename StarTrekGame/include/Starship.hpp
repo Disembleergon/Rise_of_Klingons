@@ -1,9 +1,13 @@
 #ifndef STARSHIP_HPP
 #define STARSHIP_HPP
 
+#include <compare>
+
 struct SystemData
 {
     int enemyCount{0};
+
+    auto operator<=>(const SystemData &) const = default;
 };
 
 /*
