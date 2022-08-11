@@ -1,31 +1,30 @@
-#ifndef TACTICALOFFICER_HPP
-#define TACTICALOFFICER_HPP
+#ifndef ATTACKPANEL_HPP
+#define ATTACKPANEL_HPP
 
+#include "../../Starship.hpp"
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
 #include "../../framework/gui/Clickables.hpp"
-#include "AttackPanel.hpp"
 
-namespace views
-{
-class TacticalOfficer final : public Component
+class AttackPanel final : public Component
 {
     using enemybutton = ToggleButton;
     using enemybutton_ptr = std::unique_ptr<enemybutton>;
 
   public:
-    TacticalOfficer(sf::RenderWindow &);
+    AttackPanel(sf::RenderWindow &);
 
     void update() override;
     void draw() override;
     void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
-  private:
-    GameSprite _panel;
-    Clickable _returnButton;
+  protected:
+    void generateEnemyButtons();
 
-    AttackPanel _attackPanel;
+  private:
+    GameSprite _enemyPanel;
+    std::vector<enemybutton_ptr> _enemyButtons;
+    SystemData _prevSystemData;
 };
 
-} // namespace views
 #endif

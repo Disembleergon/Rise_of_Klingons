@@ -8,8 +8,12 @@
 
 namespace resources
 {
+//
 using shared_texture_ptr = std::shared_ptr<sf::Texture>;
 using unique_texture_ptr = std::unique_ptr<sf::Texture>;
+//
+using shared_font_ptr = std::shared_ptr<sf::Font>;
+//
 
 template <class T>
 requires std::is_same_v<T, sf::Texture> || std::is_same_v<T, sf::Font>
