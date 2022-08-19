@@ -5,7 +5,7 @@
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
 #include "../../framework/gui/Clickables.hpp"
-#include "../../framework/gui/Progressbar.hpp"
+#include "../../framework/gui/Progress.hpp"
 
 class AttackPanel final : public Component
 {
@@ -27,8 +27,11 @@ class AttackPanel final : public Component
     std::vector<enemybutton_ptr> _enemyButtons;
     SystemData _prevSystemData;
 
-    Progressbar _phaserProgressbar;
-    Progressbar _torpedoProgressbar;
+    progress::ProgressBar _enemyShieldProgressbar;
+    progress::ProgressBar _enemyHullProgressbar;
+
+    progress::ProgressCircle _phaserProgressbar;
+    progress::ProgressCircle _torpedoProgressbar;
     Starship::phaserAmmo_t _prevPhaserAmmo;   // used to decide whether to update the progressbars or not (if changed)
     Starship::torpedoAmmo_t _prevTorpedoAmmo; // ^
 };

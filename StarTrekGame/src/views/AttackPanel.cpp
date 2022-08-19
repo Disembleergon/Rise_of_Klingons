@@ -4,12 +4,19 @@
 AttackPanel::AttackPanel(sf::RenderWindow &window)
     : Component(window),
       _enemyPanel("./assets/textures/enemyOverviewPanel.png"), _prevSystemData{Starship::get().currentSystemData},
-      _phaserProgressbar(window, "Phaser", PROGRESSBAR_SIZE), _torpedoProgressbar(window, "Torpedo", PROGRESSBAR_SIZE)
+      _phaserProgressbar(window, "Phaser", PROGRESSBAR_SIZE), _torpedoProgressbar(window, "Torpedo", PROGRESSBAR_SIZE),
+      _enemyShieldProgressbar(window), _enemyHullProgressbar(window)
 {
     resources::shared_font_ptr font = std::make_shared<sf::Font>();
     resources::loadResource<sf::Font>(font.get(), "./assets/fonts/PressStart2P-Regular.ttf");
     _phaserProgressbar.setFont(font);
     _torpedoProgressbar.setFont(font);
+
+    progress::ProgressBar::Config enemyShieldConfig{"Shield", sf::Color{111, 210, 237}, font};
+    _enemyShieldProgressbar.configure(enemyShieldConfig);
+
+    progress::ProgressBar::Config enemyHullConfig{"Hull", sf::Color{227, 93, 84}, font};
+    _enemyHullProgressbar.configure(enemyHullConfig);
 
     resize(m_window.getSize(), m_window.getSize());
     generateEnemyButtons();
@@ -74,6 +81,8 @@ void AttackPanel::draw()
 
     _phaserProgressbar.draw();
     _torpedoProgressbar.draw();
+    _enemyShieldProgressbar.draw();
+    _enemyHullProgressbar.draw();
 }
 
 void AttackPanel::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
@@ -106,10 +115,15 @@ void AttackPanel::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize
         btn->setSize({relSize.x * newEnemyPanelSize.x, relSize.y * newEnemyPanelSize.y});
     }
 
-    _phaserProgressbar.setPos({newWindowSize.x * 0.64f, newWindowSize.y * 0.5f});
+    _phaserProgressbar.setPos({newWindowSize.x * 0.645f, newWindowSize.y * 0.625f});
     _phaserProgressbar.resize(prevEnemyPanelSize.y, newEnemyPanelSize.y);
-    _torpedoProgressbar.setPos({newWindowSize.x * 0.82f, newWindowSize.y * 0.5f});
+    _torpedoProgressbar.setPos({newWindowSize.x * 0.825f, newWindowSize.y * 0.625f});
     _torpedoProgressbar.resize(prevEnemyPanelSize.y, newEnemyPanelSize.y);
+
+    _enemyShieldProgressbar.setPos({newWindowSize.x * 0.58f, newWindowSize.y * 0.4f});
+    _enemyShieldProgressbar.setSize({newWindowSize.x * 0.14f, newWindowSize.y * 0.05f});
+    _enemyHullProgressbar.setPos({newWindowSize.x * 0.75f, newWindowSize.y * 0.4f});
+    _enemyHullProgressbar.setSize({newWindowSize.x * 0.14f, newWindowSize.y * 0.05f});
 }
 
 void AttackPanel::generateEnemyButtons()

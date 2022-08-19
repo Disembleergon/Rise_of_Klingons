@@ -1,10 +1,12 @@
-#include "../../include/framework/gui/Progressbar.hpp"
+#include "../../include/framework/gui/Progress.hpp"
 #include <numbers>
 
-constexpr int GREYVALUE = 40;
-constexpr int GREYTEXTVALUE = GREYVALUE + 100;
+static constexpr int GREYVALUE = 40;
+static constexpr int GREYTEXTVALUE = GREYVALUE + 100;
 
-Progressbar::Progressbar(sf::RenderWindow &window, const sf::String &&title, unsigned int size)
+/////////////////////////////////////////////////////////////
+
+progress::ProgressCircle::ProgressCircle(sf::RenderWindow &window, const sf::String &&title, unsigned int size)
     : Component(window), _size{size}
 {
     _percentageDisplay.setFillColor(sf::Color{GREYTEXTVALUE});
@@ -14,8 +16,16 @@ Progressbar::Progressbar(sf::RenderWindow &window, const sf::String &&title, uns
     _titleDisplay.setString(title);
 }
 
-void Progressbar::update()
+void progress::ProgressCircle::update()
 {
+    // text
+    const int percentageToDisplay = std::ceil(_percentage * 100);
+    const std::string percentageText = std::to_string(percentageToDisplay) + "%";
+    _percentageDisplay.setString(percentageText);
+    _percentageDisplay.setOrigin(0.5f * _percentageDisplay.getLocalBounds().width,
+                                 0.5f * _percentageDisplay.getLocalBounds().height);
+
+    // indicator points
     _points.clear();
 
     static constexpr float INCREMENT = 0.1f;
@@ -34,7 +44,7 @@ void Progressbar::update()
         generatePoint(i, sf::Color{GREYVALUE});
 }
 
-void Progressbar::draw()
+void progress::ProgressCircle::draw()
 {
     for (sf::RectangleShape &p : _points)
         m_window.draw(p);
@@ -43,10 +53,10 @@ void Progressbar::draw()
     m_window.draw(_titleDisplay);
 }
 
-void Progressbar::resize(float prevOrientationValue, float newOrientationValue)
+void progress::ProgressCircle::resize(float prevOrientationValue, float newOrientationValue)
 {
     const auto relSize = _size / prevOrientationValue;
-    setSize(relSize * newOrientationValue);
+    _size = relSize * newOrientationValue;
 
     _percentageDisplay.setCharacterSize(static_cast<unsigned int>(_size * 0.3f));
     _percentageDisplay.setOrigin(0.5f * _percentageDisplay.getLocalBounds().width,
@@ -58,18 +68,7 @@ void Progressbar::resize(float prevOrientationValue, float newOrientationValue)
     update(); // regenerate dots
 }
 
-void Progressbar::setPercentage(float percentage)
-{
-    _percentage = percentage;
-
-    const int percentageToDisplay = std::ceil(_percentage * 100);
-    const std::string percentageText = std::to_string(percentageToDisplay) + "%";
-    _percentageDisplay.setString(percentageText);
-    _percentageDisplay.setOrigin(0.5f * _percentageDisplay.getLocalBounds().width,
-                                 0.5f * _percentageDisplay.getLocalBounds().height);
-}
-
-void Progressbar::generatePoint(float i, const sf::Color &clr)
+void progress::ProgressCircle::generatePoint(float i, const sf::Color &clr)
 {
     static constexpr int THICKNESS = 10;
 
@@ -81,4 +80,30 @@ void Progressbar::generatePoint(float i, const sf::Color &clr)
     p.setSize({THICKNESS, THICKNESS});
     p.setFillColor(clr);
     _points.push_back(std::move(p));
+}
+
+/////////////////////////////////////////////////////////
+
+progress::ProgressBar::ProgressBar(sf::RenderWindow &window) : Component(window)
+{
+    // only border
+    _progressOverlay.setFillColor(sf::Color::Transparent);
+    _progressOverlay.setOutlineThickness(10);
+    _progressOverlay.setOutlineColor(sf::Color{GREYVALUE});
+
+    _titleDisplay.setFillColor(sf::Color{GREYTEXTVALUE});
+}
+
+void progress::ProgressBar::update()
+{
+    const auto progressbarSize = _progressOverlay.getSize();
+    const auto indicatorWidth = _percentage * progressbarSize.x;
+    _progressIndicator.setSize({indicatorWidth, progressbarSize.y});
+}
+
+void progress::ProgressBar::draw()
+{
+    m_window.draw(_progressIndicator);
+    m_window.draw(_progressOverlay);
+    m_window.draw(_titleDisplay);
 }
