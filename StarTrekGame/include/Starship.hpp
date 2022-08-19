@@ -3,10 +3,12 @@
 
 #include <compare>
 
+#define MAX_PHASER_AMMO 100
+#define MAX_TORPEDO_AMMO 20
+
 struct SystemData
 {
     int enemyCount{0};
-
     auto operator<=>(const SystemData &) const = default;
 };
 
@@ -25,6 +27,12 @@ class Starship final
 
     float thrust{0.0f};
     float health{0.0f};
+
+    using phaserAmmo_t = float;
+    using torpedoAmmo_t = int;
+    float phaserAmmo{MAX_PHASER_AMMO};
+    int torpedoAmmo{MAX_TORPEDO_AMMO};
+
     SystemData currentSystemData;
 
   private:

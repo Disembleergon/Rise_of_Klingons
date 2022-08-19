@@ -3,10 +3,10 @@
 #include "../../include/Starship.hpp"
 
 views::Helmsman::Helmsman(sf::RenderWindow &window, Bridge &bridge)
-    : Component(window), _panel("./assets/panel.png"), _returnButton{m_window}, _starmap{m_window, bridge, _warpslider},
+    : Component(window), _panel("./assets/textures/panel.png"), _returnButton{m_window}, _starmap{m_window, bridge, _warpslider},
       _warpslider{window, std::move(_warpsliderConfig)}
 {
-    _returnButton.setNewTexture("./assets/controls/returnButton.png");
+    _returnButton.setNewTexture("./assets/textures/controls/returnButton.png");
     resize(m_window.getSize(), m_window.getSize());
 }
 

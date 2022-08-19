@@ -5,8 +5,8 @@
 #include "../../include/framework/utils/Time.hpp"
 
 Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &throttleSider)
-    : Component(window), _throttleSlider{throttleSider}, _bridge{bridge}, _galaxyBG{"./assets/galaxy.png"},
-      _starship{"./assets/starship.png", {}, {30, 60}}
+    : Component(window), _throttleSlider{throttleSider}, _bridge{bridge}, _galaxyBG{"./assets/textures/galaxy.png"},
+      _starship{"./assets/textures/starship.png", {}, {30, 60}}
 {
     resize(m_window.getSize(), m_window.getSize());
     generateButtons();
@@ -156,10 +156,10 @@ void Starmap::configureButtons()
 void Starmap::generateButtons()
 {
     resources::shared_texture_ptr systemTexture = std::make_shared<sf::Texture>();
-    resources::loadResource<sf::Texture>(systemTexture.get(), "./assets/controls/starmapButton.png");
+    resources::loadResource<sf::Texture>(systemTexture.get(), "./assets/textures/controls/starmapButton.png");
 
     resources::shared_texture_ptr toggledSystemTexture = std::make_shared<sf::Texture>();
-    resources::loadResource<sf::Texture>(toggledSystemTexture.get(), "./assets/controls/starmapButton_toggled.png");
+    resources::loadResource<sf::Texture>(toggledSystemTexture.get(), "./assets/textures/controls/starmapButton_toggled.png");
 
     for (int i = 0; i < SYSTEM_COUNT; ++i)
     {

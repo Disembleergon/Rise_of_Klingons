@@ -1,9 +1,9 @@
 #ifndef HELMSMAN_HPP
 #define HELMSMAN_HPP
 
-#include "../../framework/gui/Clickables.hpp"
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
+#include "../../framework/gui/Clickables.hpp"
 #include "../../framework/gui/Slider.hpp"
 #include "Starmap.hpp"
 
@@ -29,11 +29,11 @@ class Helmsman final : public Component
     Clickable _returnButton;
     Starmap _starmap;
 
-    SliderConfig _warpsliderConfig{"./assets/controls/warpsliderTrail.png", // trail path
-                                   {200, 300},                              // trail pos
-                                   {250, 700},                              // trail size
-                                   "./assets/controls/warpsliderKnob.png",  // knob path
-                                   {350, 175}};                             // knob size
+    SliderConfig _warpsliderConfig{"./assets/textures/controls/warpsliderTrail.png", // trail path
+                                   {200, 300},                                       // trail pos
+                                   {250, 700},                                       // trail size
+                                   "./assets/textures/controls/warpsliderKnob.png",  // knob path
+                                   {350, 175}};                                      // knob size
     Slider _warpslider;
 };
 

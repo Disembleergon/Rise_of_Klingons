@@ -3,11 +3,11 @@
 #include "../../include/framework/utils/Time.hpp"
 
 views::Bridge::Bridge(sf::RenderWindow &window)
-    : Component(window), _bg{"./assets/bridge.png"}, _helmsman{m_window}, _tacticalOfficer{m_window}, _galaxyWindow{
+    : Component(window), _bg{"./assets/textures/bridge.png"}, _helmsman{m_window}, _tacticalOfficer{m_window}, _galaxyWindow{
                                                                                                           window}
 {
-    _helmsman.setNewTexture("./assets/helmsman.png");
-    _tacticalOfficer.setNewTexture("./assets/tacticalOfficer.png");
+    _helmsman.setNewTexture("./assets/textures/helmsman.png");
+    _tacticalOfficer.setNewTexture("./assets/textures/tacticalOfficer.png");
 
     resize(m_window.getSize(), m_window.getSize());
 }
@@ -96,7 +96,7 @@ void views::Bridge::onSystemArrival()
     // ---- generate new ships ----
     _enemies.clear();
     resources::shared_texture_ptr enemyTexture = std::make_shared<sf::Texture>();
-    resources::loadResource<sf::Texture>(enemyTexture.get(), "./assets/enemy.png");
+    resources::loadResource<sf::Texture>(enemyTexture.get(), "./assets/textures/enemy.png");
 
     const auto windowPos = _galaxyWindow.windowPos;
     const auto windowSize = _galaxyWindow.windowSize;

@@ -2,9 +2,9 @@
 #include "../../include/Game.hpp"
 
 views::TacticalOfficer::TacticalOfficer(sf::RenderWindow &window)
-    : Component(window), _panel("./assets/panel.png"), _returnButton{m_window}, _attackPanel(window)
+    : Component(window), _panel("./assets/textures/panel.png"), _returnButton{m_window}, _attackPanel(window)
 {
-    _returnButton.setNewTexture("./assets/controls/returnButton.png");
+    _returnButton.setNewTexture("./assets/textures/controls/returnButton.png");
     resize(m_window.getSize(), m_window.getSize());
 }
 
