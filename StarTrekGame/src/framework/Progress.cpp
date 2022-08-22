@@ -6,14 +6,13 @@ static constexpr int GREYTEXTVALUE = GREYVALUE + 100;
 
 /////////////////////////////////////////////////////////////
 
-progress::ProgressCircle::ProgressCircle(sf::RenderWindow &window, const sf::String &&title, unsigned int size)
+progress::ProgressCircle::ProgressCircle(sf::RenderWindow &window, unsigned int size)
     : Component(window), _size{size}
 {
     _percentageDisplay.setFillColor(sf::Color{GREYTEXTVALUE});
     setPercentage(0.0f);
 
     _titleDisplay.setFillColor(sf::Color{GREYTEXTVALUE});
-    _titleDisplay.setString(title);
 }
 
 void progress::ProgressCircle::update()
@@ -30,14 +29,12 @@ void progress::ProgressCircle::update()
 
     static constexpr float INCREMENT = 0.1f;
     static constexpr float OVERLAP = 0.55f;
-    const sf::Color BLUE{48, 187, 242};
-
     static constexpr float START = std::numbers::pi_v<float> - OVERLAP;
     static constexpr float END = std::numbers::pi_v<float> + OVERLAP * 2.0f;
 
     // blue part
     for (float i = START; i < START + (END * _percentage); i += INCREMENT)
-        generatePoint(i, BLUE);
+        generatePoint(i, _clr);
 
     // grey part
     for (float i = START + (END * _percentage); i < START + END; i += INCREMENT)
@@ -96,7 +93,7 @@ progress::ProgressBar::ProgressBar(sf::RenderWindow &window) : Component(window)
 
 void progress::ProgressBar::update()
 {
-    const auto progressbarSize = _progressOverlay.getSize();
+    const sf::Vector2f progressbarSize = _progressOverlay.getSize();
     const auto indicatorWidth = _percentage * progressbarSize.x;
     _progressIndicator.setSize({indicatorWidth, progressbarSize.y});
 }

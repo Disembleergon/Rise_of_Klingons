@@ -4,18 +4,22 @@
 AttackPanel::AttackPanel(sf::RenderWindow &window)
     : Component(window),
       _enemyPanel("./assets/textures/enemyOverviewPanel.png"), _prevSystemData{Starship::get().currentSystemData},
-      _phaserProgressbar(window, "Phaser", PROGRESSBAR_SIZE), _torpedoProgressbar(window, "Torpedo", PROGRESSBAR_SIZE),
+      _phaserProgressbar(window, PROGRESSBAR_SIZE), _torpedoProgressbar(window, PROGRESSBAR_SIZE),
       _enemyShieldProgressbar(window), _enemyHullProgressbar(window)
 {
     resources::shared_font_ptr font = std::make_shared<sf::Font>();
     resources::loadResource<sf::Font>(font.get(), "./assets/fonts/PressStart2P-Regular.ttf");
-    _phaserProgressbar.setFont(font);
-    _torpedoProgressbar.setFont(font);
 
-    progress::ProgressBar::Config enemyShieldConfig{"Shield", sf::Color{111, 210, 237}, font};
+    // --- configure progress bars ---
+    progress::Config progressCircleConfig{"Phaser", sf::Color{48, 187, 242}, font}; // only the title changes
+    _phaserProgressbar.configure(progressCircleConfig);
+    progressCircleConfig.title = "Torpedo";
+    _torpedoProgressbar.configure(progressCircleConfig);
+
+    progress::Config enemyShieldConfig{"Shield", sf::Color{111, 210, 237}, font};
     _enemyShieldProgressbar.configure(enemyShieldConfig);
 
-    progress::ProgressBar::Config enemyHullConfig{"Hull", sf::Color{227, 93, 84}, font};
+    progress::Config enemyHullConfig{"Hull", sf::Color{227, 93, 84}, font};
     _enemyHullProgressbar.configure(enemyHullConfig);
 
     resize(m_window.getSize(), m_window.getSize());
