@@ -5,7 +5,8 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
     : Component(window),
       _enemyPanel("./assets/textures/enemyOverviewPanel.png"), _prevSystemData{Starship::get().currentSystemData},
       _phaserProgressbar(window, PROGRESSBAR_SIZE), _torpedoProgressbar(window, PROGRESSBAR_SIZE),
-      _enemyShieldProgressbar(window), _enemyHullProgressbar(window)
+      _enemyShieldProgressbar(window), _enemyHullProgressbar(window), _phaserShootButton(window),
+      _torpedoShootButton(window)
 {
     resources::shared_font_ptr font = std::make_shared<sf::Font>();
     resources::loadResource<sf::Font>(font.get(), "./assets/fonts/PressStart2P-Regular.ttf");
@@ -21,6 +22,11 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
 
     progress::Config enemyHullConfig{"Hull", sf::Color{227, 93, 84}, font};
     _enemyHullProgressbar.configure(enemyHullConfig);
+
+    // shoot buttons
+    const sf::String btnImg = "./assets/textures/controls/shootButton.png";
+    _phaserShootButton.setNewTexture(btnImg);
+    _torpedoShootButton.setNewTexture(btnImg);
 
     resize(m_window.getSize(), m_window.getSize());
     generateEnemyButtons();
@@ -87,6 +93,8 @@ void AttackPanel::draw()
     _torpedoProgressbar.draw();
     _enemyShieldProgressbar.draw();
     _enemyHullProgressbar.draw();
+    _phaserShootButton.draw();
+    _torpedoShootButton.draw();
 }
 
 void AttackPanel::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
@@ -128,6 +136,11 @@ void AttackPanel::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize
     _enemyShieldProgressbar.setSize({newWindowSize.x * 0.14f, newWindowSize.y * 0.05f});
     _enemyHullProgressbar.setPos({newWindowSize.x * 0.75f, newWindowSize.y * 0.4f});
     _enemyHullProgressbar.setSize({newWindowSize.x * 0.14f, newWindowSize.y * 0.05f});
+
+    _phaserShootButton.setPosition(newWindowSize.x * 0.597f, newWindowSize.y * 0.8f);
+    _phaserShootButton.setSize({newWindowSize.x * 0.1f, newWindowSize.y * 0.05f});
+    _torpedoShootButton.setPosition(newWindowSize.x * 0.778f, newWindowSize.y * 0.8f);
+    _torpedoShootButton.setSize({newWindowSize.x * 0.1f, newWindowSize.y * 0.05f});
 }
 
 void AttackPanel::generateEnemyButtons()

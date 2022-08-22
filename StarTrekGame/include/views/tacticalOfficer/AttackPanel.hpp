@@ -34,6 +34,9 @@ class AttackPanel final : public Component
     progress::ProgressCircle _torpedoProgressbar;
     Starship::phaserAmmo_t _prevPhaserAmmo;   // used to decide whether to update the progressbars or not (if changed)
     Starship::torpedoAmmo_t _prevTorpedoAmmo; // ^
+
+    Clickable _phaserShootButton;
+    Clickable _torpedoShootButton;
 };
 
 #endif
