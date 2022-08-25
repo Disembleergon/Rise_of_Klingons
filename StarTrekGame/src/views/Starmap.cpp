@@ -94,7 +94,7 @@ void Starmap::updateStarshipPosition()
     const auto distance = std::hypot(shipToTargetX, shipToTargetY);
     if (distance <= 1) // starship already at target
         slowDownShip();
-    else
+    else if (_throttleSlider.value() > 0)
         _bridge.clearEnemyVec();
 
     // move ship to target
@@ -159,7 +159,8 @@ void Starmap::generateButtons()
     resources::loadResource<sf::Texture>(systemTexture.get(), "./assets/textures/controls/starmapButton.png");
 
     resources::shared_texture_ptr toggledSystemTexture = std::make_shared<sf::Texture>();
-    resources::loadResource<sf::Texture>(toggledSystemTexture.get(), "./assets/textures/controls/starmapButton_toggled.png");
+    resources::loadResource<sf::Texture>(toggledSystemTexture.get(),
+                                         "./assets/textures/controls/starmapButton_toggled.png");
 
     for (int i = 0; i < SYSTEM_COUNT; ++i)
     {

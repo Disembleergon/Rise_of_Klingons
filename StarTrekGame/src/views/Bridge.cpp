@@ -3,8 +3,8 @@
 #include "../../include/framework/utils/Time.hpp"
 
 views::Bridge::Bridge(sf::RenderWindow &window)
-    : Component(window), _bg{"./assets/textures/bridge.png"}, _helmsman{m_window}, _tacticalOfficer{m_window}, _galaxyWindow{
-                                                                                                          window}
+    : Component(window), _bg{"./assets/textures/bridge.png"}, _helmsman{m_window}, _tacticalOfficer{m_window},
+      _galaxyWindow{window}
 {
     _helmsman.setNewTexture("./assets/textures/helmsman.png");
     _tacticalOfficer.setNewTexture("./assets/textures/tacticalOfficer.png");
@@ -90,8 +90,8 @@ void views::Bridge::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSi
 void views::Bridge::onSystemArrival()
 {
     SystemData currentSystemData = Starship::get().currentSystemData;
-    if (_lastSystemData.enemyCount == currentSystemData.enemyCount)
-        return;
+    if (_enemies.size() == currentSystemData.enemyCount)
+        return; // regenerating not neccessary
 
     // ---- generate new ships ----
     _enemies.clear();
@@ -120,8 +120,6 @@ void views::Bridge::onSystemArrival()
 
         _enemies.push_back(std::move(enemy));
     }
-
-    _lastSystemData = currentSystemData;
 }
 
 void views::Bridge::clearEnemyVec()

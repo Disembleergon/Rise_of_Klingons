@@ -52,7 +52,6 @@ class Bridge final : public Component
 
   private:
     std::vector<EnemyShip> _enemies;
-    SystemData _lastSystemData;
 
     GameSprite _bg;
     galaxywindow::GalaxyWindow _galaxyWindow;
