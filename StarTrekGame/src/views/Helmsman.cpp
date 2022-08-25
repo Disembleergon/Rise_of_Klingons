@@ -3,7 +3,8 @@
 #include "../../include/Starship.hpp"
 
 views::Helmsman::Helmsman(sf::RenderWindow &window, Bridge &bridge)
-    : Component(window), _panel("./assets/textures/panel.png"), _returnButton{m_window}, _starmap{m_window, bridge, _warpslider},
+    : Component(window),
+      _panel("./assets/textures/panel.png"), _returnButton{m_window}, _starmap{m_window, bridge, _warpslider},
       _warpslider{window, std::move(_warpsliderConfig)}
 {
     _returnButton.setNewTexture("./assets/textures/controls/returnButton.png");
@@ -16,7 +17,7 @@ void views::Helmsman::update()
     _starmap.update();
 
     _warpslider.update();
-    Starship::get().thrust = _warpslider.value() * 100;
+    Starship::get().thrust = _warpslider.value() * MAX_THRUST;
 
     if (_returnButton.clicked())
     {

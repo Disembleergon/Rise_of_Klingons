@@ -2,8 +2,7 @@
 #define PROGRESSBAR_SIZE 200u
 
 AttackPanel::AttackPanel(sf::RenderWindow &window)
-    : Component(window),
-      _enemyPanel("./assets/textures/enemyOverviewPanel.png"), _prevSystemData{Starship::get().currentSystemData},
+    : Component(window), _enemyPanel("./assets/textures/enemyOverviewPanel.png"),
       _phaserProgressbar(window, PROGRESSBAR_SIZE), _torpedoProgressbar(window, PROGRESSBAR_SIZE),
       _enemyShieldProgressbar(window), _enemyHullProgressbar(window), _phaserShootButton(window),
       _torpedoShootButton(window)
@@ -34,12 +33,15 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
 
 void AttackPanel::update()
 {
+    const auto currentThrust = Starship::get().thrust;
+    if (currentThrust > 0) // no enemies when travelling
+        _enemyButtons.clear();
+
     // regenerate buttons on system arrival
-    const auto currentSystemData = Starship::get().currentSystemData;
-    if (_prevSystemData != currentSystemData)
+    const auto systemData = Starship::get().currentSystemData;
+    if (currentThrust == 0.0f && _enemyButtons.size() != systemData.enemyCount)
     {
         generateEnemyButtons();
-        _prevSystemData = currentSystemData;
     }
 
     const Starship::phaserAmmo_t currentPhaserAmmo = Starship::get().phaserAmmo;

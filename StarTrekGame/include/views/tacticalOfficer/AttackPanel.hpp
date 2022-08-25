@@ -25,7 +25,6 @@ class AttackPanel final : public Component
   private:
     GameSprite _enemyPanel;
     std::vector<enemybutton_ptr> _enemyButtons;
-    SystemData _prevSystemData;
 
     progress::ProgressBar _enemyShieldProgressbar;
     progress::ProgressBar _enemyHullProgressbar;

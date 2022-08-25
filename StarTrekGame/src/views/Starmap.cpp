@@ -131,7 +131,7 @@ void Starmap::slowDownShip()
 
     const float thrustVal = std::max(0.0f, _throttleSlider.value() - SPEED_REDUCTION * Time::deltaTime);
     _throttleSlider.setValue(thrustVal);
-    Starship::get().thrust = _throttleSlider.value() * 100.0f;
+    Starship::get().thrust = _throttleSlider.value() * MAX_THRUST;
 }
 
 void Starmap::configureButtons()

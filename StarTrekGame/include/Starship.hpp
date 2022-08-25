@@ -5,6 +5,7 @@
 
 #define MAX_PHASER_AMMO 100
 #define MAX_TORPEDO_AMMO 20
+#define MAX_THRUST 100
 
 struct SystemData
 {
@@ -25,7 +26,7 @@ class Starship final
         return starship;
     }
 
-    float thrust{0.0f};
+    float thrust{0.0f}; // value between 0 and 100 (look at MAX_THRUST)
     float health{0.0f};
 
     using phaserAmmo_t = float;
