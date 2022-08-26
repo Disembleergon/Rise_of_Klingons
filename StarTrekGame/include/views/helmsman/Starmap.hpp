@@ -2,28 +2,33 @@
 #define STARMAP_HPP
 
 #include "../../Starship.hpp"
-#include "../../framework/gui/Clickables.hpp"
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
+#include "../../framework/gui/Clickables.hpp"
 #include "../../framework/gui/Slider.hpp"
 #include "../../framework/utils/Random.hpp"
 #include "../bridge/Bridge.hpp"
 
-class StarmapButton final : public ToggleButton
-{
-  public:
-    StarmapButton(sf::RenderWindow &window, const resources::shared_texture_ptr &texture1,
-                  const resources::shared_texture_ptr &texture2)
-        : ToggleButton(window, texture1, texture2), data{Random::generate_integral(0, 3)}
-    {
-    }
-
-    using starmapbutton_ptr = std::unique_ptr<StarmapButton>;
-    SystemData data;
-};
-
 class Starmap final : public Component
 {
+    class StarmapButton final : public ToggleButton
+    {
+      public:
+        StarmapButton(sf::RenderWindow &window, const resources::shared_texture_ptr &texture1,
+                      const resources::shared_texture_ptr &texture2)
+            : ToggleButton(window, texture1, texture2)
+        {
+            // fill enemy vector
+            const int enemyCount = Random::generate_integral(0, 3);
+            data.enemies.reserve(enemyCount);
+            for (int i = 0; i < enemyCount; ++i)
+                data.enemies.emplace_back();
+        }
+
+        using starmapbutton_ptr = std::unique_ptr<StarmapButton>;
+        SystemData data;
+    };
+
   public:
     Starmap(sf::RenderWindow &, views::Bridge &, Slider &throttleSider);
     Starmap(const Starmap &) = delete;

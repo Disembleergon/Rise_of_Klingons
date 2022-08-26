@@ -38,8 +38,8 @@ void AttackPanel::update()
         _enemyButtons.clear();
 
     // regenerate buttons on system arrival
-    const auto systemData = Starship::get().currentSystemData;
-    if (currentThrust == 0.0f && _enemyButtons.size() != systemData.enemyCount)
+    const SystemData *systemData = Starship::get().currentSystemData;
+    if (currentThrust == 0.0f && _enemyButtons.size() != systemData->enemies.size())
     {
         generateEnemyButtons();
     }
@@ -63,15 +63,21 @@ void AttackPanel::update()
     //
 
     // update enemy buttons
-    for (enemybutton_ptr &btn : _enemyButtons)
+    for (EnemyButton::enemybutton_ptr &btn : _enemyButtons)
     {
         btn->update();
         if (btn->clicked())
         {
             btn->setToggled(true);
 
+            // update with current enemy values
+            _enemyHullProgressbar.setPercentage(btn->data.hull / MAX_HULL);
+            _enemyHullProgressbar.update();
+            _enemyShieldProgressbar.setPercentage(btn->data.shield / MAX_SHIELD);
+            _enemyShieldProgressbar.update();
+
             // untoggle all buttons except the one that was clicked
-            for (enemybutton_ptr &b : _enemyButtons)
+            for (EnemyButton::enemybutton_ptr &b : _enemyButtons)
             {
                 if (b == btn)
                     continue;
@@ -88,7 +94,7 @@ void AttackPanel::update()
 void AttackPanel::draw()
 {
     m_window.draw(_enemyPanel);
-    for (enemybutton_ptr &enemyBtn : _enemyButtons)
+    for (EnemyButton::enemybutton_ptr &enemyBtn : _enemyButtons)
         enemyBtn->draw();
 
     _phaserProgressbar.draw();
@@ -117,7 +123,7 @@ void AttackPanel::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize
         prevEnemyPanelPos = newEnemyPanelPos;
     }
 
-    for (enemybutton_ptr &btn : _enemyButtons)
+    for (EnemyButton::enemybutton_ptr &btn : _enemyButtons)
     {
         const sf::Vector2f pos = btn->getPosition() - prevEnemyPanelPos;
         const sf::Vector2f relPos{pos.x / prevEnemyPanelSize.x, pos.y / prevEnemyPanelSize.y};
@@ -156,7 +162,7 @@ void AttackPanel::generateEnemyButtons()
     resources::shared_texture_ptr toggledTexture = std::make_shared<sf::Texture>();
     resources::loadResource<sf::Texture>(toggledTexture.get(), "./assets/textures/controls/enemyButton_toggled.png");
 
-    const auto enemyCount = Starship::get().currentSystemData.enemyCount;
+    const auto enemyCount = Starship::get().currentSystemData->enemies.size();
     const auto SPACE_BETWEEN = _enemyPanel.getSize().x * 0.05f;
     const auto BUTTON_SIZE = _enemyPanel.getSize().x * 0.2f;
     const auto buttonAreaWidth = BUTTON_SIZE * enemyCount + SPACE_BETWEEN * (enemyCount - 1);
@@ -164,7 +170,7 @@ void AttackPanel::generateEnemyButtons()
 
     for (int i = 0; i < enemyCount; ++i)
     {
-        enemybutton_ptr btn = std::make_unique<enemybutton>(m_window, untoggledTexture, toggledTexture);
+        EnemyButton::enemybutton_ptr btn = std::make_unique<EnemyButton>(m_window, untoggledTexture, toggledTexture, i);
         btn->setSize({BUTTON_SIZE, BUTTON_SIZE});
         btn->setPosition(panelCenter.x - buttonAreaWidth * 0.5f + i * (BUTTON_SIZE + SPACE_BETWEEN),
                          panelCenter.y - BUTTON_SIZE * 0.5f);

@@ -89,8 +89,8 @@ void views::Bridge::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSi
 
 void views::Bridge::onSystemArrival()
 {
-    SystemData currentSystemData = Starship::get().currentSystemData;
-    if (_enemies.size() == currentSystemData.enemyCount)
+    const SystemData *currentSystemData = Starship::get().currentSystemData;
+    if (_enemies.size() == currentSystemData->enemies.size())
         return; // regenerating not neccessary
 
     // ---- generate new ships ----
@@ -101,7 +101,7 @@ void views::Bridge::onSystemArrival()
     const auto windowPos = _galaxyWindow.windowPos;
     const auto windowSize = _galaxyWindow.windowSize;
 
-    for (int i = 0; i < currentSystemData.enemyCount; ++i)
+    for (int i = 0; i < currentSystemData->enemies.size(); ++i)
     {
         const auto enemyWidth = Random::generate_floating_point(windowSize.x * 0.05f, windowSize.x * 0.6f);
         const auto enemyHeight = enemyWidth * 0.58f; // apply aspect ratio

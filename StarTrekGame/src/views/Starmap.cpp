@@ -15,7 +15,8 @@ Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &thrott
     const int currentSystemButtonIndex = Random::generate_integral<int>(0, SYSTEM_COUNT - 1);
     _currentSystemButton = _starmapButtons.at(currentSystemButtonIndex).get();
     _currentSystemButton->setToggled(true);
-    Starship::get().currentSystemData = _currentSystemButton->data;
+
+    Starship::get().currentSystemData = &_currentSystemButton->data;
 
     // place starship at selected system
     _starship.setOrigin(_starship.getSize().x * 0.5f, _starship.getSize().y * 0.5f);
@@ -122,7 +123,7 @@ void Starmap::slowDownShip()
 {
     if (_throttleSlider.value() == 0.0f)
     {
-        Starship::get().currentSystemData = _currentSystemButton->data;
+        Starship::get().currentSystemData = &_currentSystemButton->data;
         _bridge.onSystemArrival();
         return;
     }

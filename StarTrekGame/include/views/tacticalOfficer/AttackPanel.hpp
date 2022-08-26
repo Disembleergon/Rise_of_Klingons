@@ -9,8 +9,18 @@
 
 class AttackPanel final : public Component
 {
-    using enemybutton = ToggleButton;
-    using enemybutton_ptr = std::unique_ptr<enemybutton>;
+    class EnemyButton final : public ToggleButton
+    {
+      public:
+        EnemyButton(sf::RenderWindow &window, const resources::shared_texture_ptr &texture1,
+                    const resources::shared_texture_ptr &texture2, unsigned int index)
+            : ToggleButton(window, texture1, texture2), data{Starship::get().currentSystemData->enemies[index]}
+        {
+        }
+
+        EnemyData &data; // modify enemy data value of current system data (stored in current selected StarmapButton)
+        using enemybutton_ptr = std::unique_ptr<EnemyButton>;
+    };
 
   public:
     AttackPanel(sf::RenderWindow &);
@@ -24,7 +34,7 @@ class AttackPanel final : public Component
 
   private:
     GameSprite _enemyPanel;
-    std::vector<enemybutton_ptr> _enemyButtons;
+    std::vector<EnemyButton::enemybutton_ptr> _enemyButtons;
 
     progress::ProgressBar _enemyShieldProgressbar;
     progress::ProgressBar _enemyHullProgressbar;
