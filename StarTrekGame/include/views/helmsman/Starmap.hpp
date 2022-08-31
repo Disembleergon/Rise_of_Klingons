@@ -20,13 +20,15 @@ class Starmap final : public Component
         {
             // fill enemy vector
             const int enemyCount = Random::generate_integral(0, 3);
-            data.enemies.reserve(enemyCount);
             for (int i = 0; i < enemyCount; ++i)
-                data.enemies.emplace_back();
+                data.enemies.emplace_back(enemyIdCounter++);
         }
 
         using starmapbutton_ptr = std::unique_ptr<StarmapButton>;
         SystemData data;
+
+      private:
+        static unsigned int enemyIdCounter; // default = 0
     };
 
   public:

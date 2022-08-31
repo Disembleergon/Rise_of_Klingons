@@ -13,8 +13,8 @@ class AttackPanel final : public Component
     {
       public:
         EnemyButton(sf::RenderWindow &window, const resources::shared_texture_ptr &texture1,
-                    const resources::shared_texture_ptr &texture2, unsigned int index)
-            : ToggleButton(window, texture1, texture2), data{Starship::get().currentSystemData->enemies[index]}
+                    const resources::shared_texture_ptr &texture2, EnemyData &enemydata)
+            : ToggleButton(window, texture1, texture2), data{enemydata}
         {
         }
 
@@ -31,10 +31,13 @@ class AttackPanel final : public Component
 
   protected:
     void generateEnemyButtons();
+    void updateEnemyStatDisplays();
+    void phaser();
 
   private:
     GameSprite _enemyPanel;
     std::vector<EnemyButton::enemybutton_ptr> _enemyButtons;
+    EnemyButton *_selectedEnemy{nullptr};
 
     progress::ProgressBar _enemyShieldProgressbar;
     progress::ProgressBar _enemyHullProgressbar;
@@ -46,6 +49,13 @@ class AttackPanel final : public Component
 
     Clickable _phaserShootButton;
     Clickable _torpedoShootButton;
+
+    // when checking if thrust is >0, reset all values and progress bars and set this value to true
+    bool _cleanupAlreadyHappened{false}; // (so nothing has to get updated every frame)
+    SystemData _prevSystemData; // to check if we arrived at new system
+
+    bool _isShootingPhaser{false};
+    float _phaserShootingProgress{0.0f}; // shows how long the phaser was active already
 };
 
 #endif

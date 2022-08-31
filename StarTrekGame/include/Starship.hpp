@@ -12,6 +12,18 @@
 
 struct EnemyData
 {
+    EnemyData(unsigned int id) : ID{id}
+    {
+    }
+    EnemyData(const EnemyData &) = default;
+    EnemyData &operator=(const EnemyData &) = default;
+
+    bool operator==(const EnemyData &ed) const
+    {
+        return ID == ed.ID;
+    }
+    unsigned int ID; // not a const because that would remove the copy constructor and operator
+
     float hull{MAX_HULL};
     float shield{MAX_SHIELD};
 };

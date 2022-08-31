@@ -4,6 +4,8 @@
 #include "../../include/framework/utils/Random.hpp"
 #include "../../include/framework/utils/Time.hpp"
 
+unsigned int Starmap::StarmapButton::enemyIdCounter = 0;
+
 Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &throttleSider)
     : Component(window), _throttleSlider{throttleSider}, _bridge{bridge}, _galaxyBG{"./assets/textures/galaxy.png"},
       _starship{"./assets/textures/starship.png", {}, {30, 60}}

@@ -1,11 +1,12 @@
 #include "../../include/views/tacticalOfficer/AttackPanel.hpp"
+#include "../../include/framework/utils/Time.hpp"
 #define PROGRESSBAR_SIZE 200u
 
 AttackPanel::AttackPanel(sf::RenderWindow &window)
     : Component(window), _enemyPanel("./assets/textures/enemyOverviewPanel.png"),
       _phaserProgressbar(window, PROGRESSBAR_SIZE), _torpedoProgressbar(window, PROGRESSBAR_SIZE),
       _enemyShieldProgressbar(window), _enemyHullProgressbar(window), _phaserShootButton(window),
-      _torpedoShootButton(window)
+      _torpedoShootButton(window), _prevSystemData{*Starship::get().currentSystemData}
 {
     resources::shared_font_ptr font = std::make_shared<sf::Font>();
     resources::loadResource<sf::Font>(font.get(), "./assets/fonts/PressStart2P-Regular.ttf");
@@ -34,14 +35,23 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
 void AttackPanel::update()
 {
     const auto currentThrust = Starship::get().thrust;
-    if (currentThrust > 0) // no enemies when travelling
+    if (currentThrust > 0 && !_cleanupAlreadyHappened) // no enemies when travelling
+    {
         _enemyButtons.clear();
+        _selectedEnemy = nullptr;
+        updateEnemyStatDisplays();
+        _cleanupAlreadyHappened = true;
+    }
 
     // regenerate buttons on system arrival
     const SystemData *systemData = Starship::get().currentSystemData;
-    if (currentThrust == 0.0f && _enemyButtons.size() != systemData->enemies.size())
+    if (*systemData != _prevSystemData)
     {
+        _selectedEnemy = nullptr;
         generateEnemyButtons();
+        updateEnemyStatDisplays();
+        _prevSystemData = *systemData;
+        _cleanupAlreadyHappened = false; // reset for next travel
     }
 
     const Starship::phaserAmmo_t currentPhaserAmmo = Starship::get().phaserAmmo;
@@ -69,12 +79,9 @@ void AttackPanel::update()
         if (btn->clicked())
         {
             btn->setToggled(true);
+            _selectedEnemy = btn.get();
 
-            // update with current enemy values
-            _enemyHullProgressbar.setPercentage(btn->data.hull / MAX_HULL);
-            _enemyHullProgressbar.update();
-            _enemyShieldProgressbar.setPercentage(btn->data.shield / MAX_SHIELD);
-            _enemyShieldProgressbar.update();
+            updateEnemyStatDisplays();
 
             // untoggle all buttons except the one that was clicked
             for (EnemyButton::enemybutton_ptr &b : _enemyButtons)
@@ -88,6 +95,17 @@ void AttackPanel::update()
         {
             btn->toggledSinceCurrentClick = false;
         }
+    }
+
+    // update shooting buttons
+    _phaserShootButton.update();
+    if (_phaserShootButton.clicked())
+        _isShootingPhaser = true;
+
+    if (_isShootingPhaser)
+    {
+        phaser();
+        updateEnemyStatDisplays();
     }
 }
 
@@ -168,13 +186,69 @@ void AttackPanel::generateEnemyButtons()
     const auto buttonAreaWidth = BUTTON_SIZE * enemyCount + SPACE_BETWEEN * (enemyCount - 1);
     const auto panelCenter = _enemyPanel.getPosition() + 0.5f * _enemyPanel.getSize();
 
+    auto enemyIterator = Starship::get().currentSystemData->enemies.begin();
     for (int i = 0; i < enemyCount; ++i)
     {
-        EnemyButton::enemybutton_ptr btn = std::make_unique<EnemyButton>(m_window, untoggledTexture, toggledTexture, i);
+        EnemyButton::enemybutton_ptr btn =
+            std::make_unique<EnemyButton>(m_window, untoggledTexture, toggledTexture, *enemyIterator);
+        std::advance(enemyIterator, 1);
+
         btn->setSize({BUTTON_SIZE, BUTTON_SIZE});
         btn->setPosition(panelCenter.x - buttonAreaWidth * 0.5f + i * (BUTTON_SIZE + SPACE_BETWEEN),
                          panelCenter.y - BUTTON_SIZE * 0.5f);
 
         _enemyButtons.push_back(std::move(btn));
+    }
+}
+
+void AttackPanel::updateEnemyStatDisplays()
+{
+    // standard values if there's no ship selected
+    float hull = 0.0f;
+    float shield = 0.0f;
+
+    if (_selectedEnemy)
+    {
+        hull = _selectedEnemy->data.hull;
+        shield = _selectedEnemy->data.shield;
+    }
+
+    _enemyHullProgressbar.setPercentage(hull / MAX_HULL);
+    _enemyHullProgressbar.update();
+    _enemyShieldProgressbar.setPercentage(shield / MAX_SHIELD);
+    _enemyShieldProgressbar.update();
+}
+
+void AttackPanel::phaser()
+{
+    if (_phaserShootingProgress > 2.5f || Starship::get().phaserAmmo <= 0.0f)
+    {
+        _isShootingPhaser = false;
+        _phaserShootingProgress = 0.0f;
+        return;
+    }
+
+    _phaserShootingProgress += Time::deltaTime;
+    Starship::get().phaserAmmo -= Time::deltaTime;
+
+    // no enemy selected
+    if (!_selectedEnemy)
+        return;
+
+    static constexpr int SHIELD_DAMAGE = 8;
+    static constexpr int HULL_DAMAGE = 3;
+
+    if (_enemyShieldProgressbar.percentage() > 0.0f)
+        _selectedEnemy->data.shield -= Time::deltaTime * SHIELD_DAMAGE;
+    else if (_enemyHullProgressbar.percentage() > 0.0f)
+        _selectedEnemy->data.hull -= Time::deltaTime * HULL_DAMAGE;
+    else
+    {
+        // kill (remove) enemy ship
+        auto &enemyVector = Starship::get().currentSystemData->enemies;
+        auto isSelectedEnemy = std::remove(enemyVector.begin(), enemyVector.end(), _selectedEnemy->data);
+        enemyVector.erase(isSelectedEnemy, enemyVector.end());
+
+        _selectedEnemy = nullptr;
     }
 }
