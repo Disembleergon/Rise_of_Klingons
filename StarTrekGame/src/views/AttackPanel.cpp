@@ -67,7 +67,7 @@ void AttackPanel::update()
     if (_prevTorpedoAmmo != currentTorpedoAmmo)
     {
         _prevTorpedoAmmo = currentTorpedoAmmo;
-        _torpedoProgressbar.setPercentage(currentTorpedoAmmo / MAX_TORPEDO_AMMO);
+        _torpedoProgressbar.setPercentage(static_cast<float>(currentTorpedoAmmo) / MAX_TORPEDO_AMMO);
         _torpedoProgressbar.update();
     }
     //
@@ -102,11 +102,15 @@ void AttackPanel::update()
     if (_phaserShootButton.clicked())
         _isShootingPhaser = true;
 
+    _torpedoShootButton.update();
+    if (_torpedoShootButton.clicked())
+        _isShootingTorpedo = true;
+
     if (_isShootingPhaser)
-    {
         phaser();
-        updateEnemyStatDisplays();
-    }
+
+    if (_isShootingTorpedo)
+        torpedo();
 }
 
 void AttackPanel::draw()
@@ -242,13 +246,54 @@ void AttackPanel::phaser()
         _selectedEnemy->data.shield -= Time::deltaTime * SHIELD_DAMAGE;
     else if (_enemyHullProgressbar.percentage() > 0.0f)
         _selectedEnemy->data.hull -= Time::deltaTime * HULL_DAMAGE;
-    else
-    {
-        // kill (remove) enemy ship
-        auto &enemyVector = Starship::get().currentSystemData->enemies;
-        auto isSelectedEnemy = std::remove(enemyVector.begin(), enemyVector.end(), _selectedEnemy->data);
-        enemyVector.erase(isSelectedEnemy, enemyVector.end());
 
-        _selectedEnemy = nullptr;
+    if (_selectedEnemy->data.hull == 0.0f)
+        killSelectedShip();
+
+    updateEnemyStatDisplays();
+}
+
+void AttackPanel::torpedo()
+{
+    // after pressing the button, directly substract the used ammo
+    if (!_torpedoWasReleased)
+    {
+        Starship::get().torpedoAmmo--;
+        _torpedoWasReleased = true;
     }
+
+    if (_torpedoShootingProgress > 4.0f || Starship::get().torpedoAmmo == 0)
+    {
+        // --- torpedo hit ---
+        static constexpr int SHIELD_DAMAGE = 10;
+        static constexpr int HULL_DAMAGE = 55;
+
+        if (_enemyShieldProgressbar.percentage() > 0.0f)
+            _selectedEnemy->data.shield = std::max(0.0f, _selectedEnemy->data.shield - SHIELD_DAMAGE);
+        else if (_enemyHullProgressbar.percentage() > 0.0f)
+            _selectedEnemy->data.hull = std::max(0.0f, _selectedEnemy->data.hull - HULL_DAMAGE);
+
+        if (_selectedEnemy->data.hull == 0.0f)
+            killSelectedShip();
+
+        updateEnemyStatDisplays();
+
+        // reset
+        _isShootingTorpedo = false;
+        _torpedoWasReleased = false;
+        _torpedoShootingProgress = 0.0f;
+        return;
+    }
+
+    _torpedoShootingProgress += Time::deltaTime;
+}
+
+void AttackPanel::killSelectedShip()
+{
+    // kill (remove) enemy ship
+    auto &enemyVector = Starship::get().currentSystemData->enemies;
+    auto isSelectedEnemy = std::remove(enemyVector.begin(), enemyVector.end(), _selectedEnemy->data);
+    enemyVector.erase(isSelectedEnemy, enemyVector.end());
+
+    _selectedEnemy = nullptr;
 }

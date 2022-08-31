@@ -33,6 +33,8 @@ class AttackPanel final : public Component
     void generateEnemyButtons();
     void updateEnemyStatDisplays();
     void phaser();
+    void torpedo();
+    void killSelectedShip();
 
   private:
     GameSprite _enemyPanel;
@@ -51,11 +53,15 @@ class AttackPanel final : public Component
     Clickable _torpedoShootButton;
 
     // when checking if thrust is >0, reset all values and progress bars and set this value to true
-    bool _cleanupAlreadyHappened{false}; // (so nothing has to get updated every frame)
-    SystemData _prevSystemData; // to check if we arrived at new system
+    bool _cleanupAlreadyHappened{false}; // (so nothing has to get updated every frame).
+    SystemData _prevSystemData;          // to check if we arrived at new system
 
     bool _isShootingPhaser{false};
     float _phaserShootingProgress{0.0f}; // shows how long the phaser was active already
+
+    bool _isShootingTorpedo{false};
+    bool _torpedoWasReleased{false};
+    float _torpedoShootingProgress{0.0f}; // ^
 };
 
 #endif
