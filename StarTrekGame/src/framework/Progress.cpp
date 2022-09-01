@@ -6,8 +6,7 @@ static constexpr int GREYTEXTVALUE = GREYVALUE + 100;
 
 /////////////////////////////////////////////////////////////
 
-progress::ProgressCircle::ProgressCircle(sf::RenderWindow &window, unsigned int size)
-    : Component(window), _size{size}
+progress::ProgressCircle::ProgressCircle(sf::RenderWindow &window, unsigned int size) : Component(window), _size{size}
 {
     _percentageDisplay.setFillColor(sf::Color{GREYTEXTVALUE});
     setPercentage(0.0f);
@@ -37,7 +36,8 @@ void progress::ProgressCircle::update()
         generatePoint(i, _clr);
 
     // grey part
-    for (float i = START + (END * _percentage); i < START + END; i += INCREMENT)
+    // (ceil * 10 / 10 ...... round to 1 decimal place)
+    for (float i = START + std::ceil(END * _percentage * 10) / 10; i < START + END; i += INCREMENT)
         generatePoint(i, sf::Color{GREYVALUE});
 }
 
