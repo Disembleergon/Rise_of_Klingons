@@ -27,7 +27,7 @@ class Star : public sf::RectangleShape
 
 class GalaxyWindow final : public Component
 {
-    static constexpr int NUM_STARS = 100;
+    static constexpr int NUM_STARS = 300;
 
   public:
     GalaxyWindow(sf::RenderWindow &window);

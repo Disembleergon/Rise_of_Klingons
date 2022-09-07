@@ -24,7 +24,7 @@ void galaxywindow::GalaxyWindow::update()
         starPos.x += star->direction().x * shipSpeed * Time::deltaTime;
         starPos.y += star->direction().y * shipSpeed * Time::deltaTime;
         star->setPosition(starPos);
-        star->setSize({2 * Starship::get().thrust + 5, 0.01f * Starship::get().thrust + 5});
+        star->setSize({2 * Starship::get().thrust + 5, 1}); // {length, width}
 
         // fade-in effect on spawn
         sf::Color starClr = star->getFillColor();
