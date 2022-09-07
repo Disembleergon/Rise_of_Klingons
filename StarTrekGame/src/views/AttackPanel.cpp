@@ -1,5 +1,7 @@
 #include "../../include/views/tacticalOfficer/AttackPanel.hpp"
 #include "../../include/framework/utils/Time.hpp"
+#include "../../include/Globals.hpp"
+
 #define PROGRESSBAR_SIZE 200u
 
 AttackPanel::AttackPanel(sf::RenderWindow &window)
@@ -9,18 +11,18 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
       _torpedoShootButton(window), _prevSystemData{*Starship::get().currentSystemData}
 {
     resources::shared_font_ptr font = std::make_shared<sf::Font>();
-    resources::loadResource<sf::Font>(font.get(), "./assets/fonts/PressStart2P-Regular.ttf");
+    resources::loadResource<sf::Font>(font.get(), globals::FONT_PATH);
 
     // --- configure progress bars ---
-    progress::Config progressCircleConfig{"Phaser", sf::Color{48, 187, 242}, font}; // only the title changes
+    progress::Config progressCircleConfig{"Phaser", globals::UI_BLUE, font}; // only the title changes
     _phaserProgressbar.configure(progressCircleConfig);
     progressCircleConfig.title = "Torpedo";
     _torpedoProgressbar.configure(progressCircleConfig);
 
-    progress::Config enemyShieldConfig{"Shield", sf::Color{111, 210, 237}, font};
+    progress::Config enemyShieldConfig{"Shield", globals::SHIELD_BLUE, font};
     _enemyShieldProgressbar.configure(enemyShieldConfig);
 
-    progress::Config enemyHullConfig{"Hull", sf::Color{227, 93, 84}, font};
+    progress::Config enemyHullConfig{"Hull", globals::HULL_RED, font};
     _enemyHullProgressbar.configure(enemyHullConfig);
 
     // shoot buttons
