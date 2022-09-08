@@ -24,6 +24,11 @@ class TacticalOfficer final : public Component
     GameSprite _panel;
     Clickable _returnButton;
 
+    progress::ProgressCircle _starshipHullDisplay;
+    progress::ProgressCircle _starshipShieldDisplay;
+    float _prevStarshipHull; // used to update the displays when health changed (comparision)
+    float _prevStarshipShield; // ^
+
     AttackPanel _attackPanel;
 };
 

@@ -67,7 +67,7 @@ void progress::ProgressCircle::resize(float prevOrientationValue, float newOrien
 
 void progress::ProgressCircle::generatePoint(float i, const sf::Color &clr)
 {
-    static constexpr int THICKNESS = 10;
+    const float THICKNESS = _size * 0.06f;
 
     const auto x = _pos.x + std::cos(i) * _size;
     const auto y = _pos.y + std::sin(i) * _size;
