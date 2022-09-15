@@ -11,7 +11,7 @@ class GameSprite : public sf::RectangleShape
     {
     }
     GameSprite(const sf::String &texturePath, const sf::Vector2f &pos = {}, const sf::Vector2f &size = {})
-        : _texture{std::make_unique<sf::Texture>()}
+        : _texture{std::make_shared<sf::Texture>()}
     {
         setPosition(pos);
         setSize(size);
@@ -25,8 +25,14 @@ class GameSprite : public sf::RectangleShape
         setTexture(_texture.get());
     }
 
+    void setNewTexture(resources::shared_texture_ptr &texture)
+    {
+        _texture = texture;
+        setTexture(_texture.get());
+    }
+
   private:
-    resources::unique_texture_ptr _texture;
+    resources::shared_texture_ptr _texture;
 };
 
 #endif

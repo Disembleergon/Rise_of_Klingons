@@ -5,19 +5,17 @@
 #define STARSHIP_STATS_PROGRESSBAR_SIZE 150u
 
 views::TacticalOfficer::TacticalOfficer(sf::RenderWindow &window)
-    : Component(window), _panel("./assets/textures/panel.png"), _returnButton{m_window}, _attackPanel(window),
+    : Component(window), _returnButton{m_window}, _attackPanel(window),
       _starshipHullDisplay(window, STARSHIP_STATS_PROGRESSBAR_SIZE),
       _starshipShieldDisplay(window, STARSHIP_STATS_PROGRESSBAR_SIZE)
 {
-    resources::shared_font_ptr font = std::make_shared<sf::Font>();
-    resources::loadResource<sf::Font>(font.get(), globals::FONT_PATH);
-
-    progress::Config hullDisplayConfig{"Hull", globals::HULL_RED, font};
+    progress::Config hullDisplayConfig{"Hull", Globals::get().HULL_RED, Globals::get().FONT};
     _starshipHullDisplay.configure(hullDisplayConfig);
-    progress::Config shieldDisplayConfig{"Shield", globals::SHIELD_BLUE, font};
+    progress::Config shieldDisplayConfig{"Shield", Globals::get().SHIELD_BLUE, Globals::get().FONT};
     _starshipShieldDisplay.configure(shieldDisplayConfig);
 
-    _returnButton.setNewTexture("./assets/textures/controls/returnButton.png");
+    _panel.setNewTexture(Globals::get().PANEL_TEXTURE);
+    _returnButton.setNewTexture(Globals::get().RETURN_BTN_TEXTURE);
     resize(m_window.getSize(), m_window.getSize());
 }
 

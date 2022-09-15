@@ -1,6 +1,6 @@
 #include "../../include/views/tacticalOfficer/AttackPanel.hpp"
-#include "../../include/framework/utils/Time.hpp"
 #include "../../include/Globals.hpp"
+#include "../../include/framework/utils/Time.hpp"
 
 #define PROGRESSBAR_SIZE 200u
 
@@ -10,19 +10,17 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
       _enemyShieldProgressbar(window), _enemyHullProgressbar(window), _phaserShootButton(window),
       _torpedoShootButton(window), _prevSystemData{*Starship::get().currentSystemData}
 {
-    resources::shared_font_ptr font = std::make_shared<sf::Font>();
-    resources::loadResource<sf::Font>(font.get(), globals::FONT_PATH);
-
     // --- configure progress bars ---
-    progress::Config progressCircleConfig{"Phaser", globals::UI_BLUE, font}; // only the title changes
+    progress::Config progressCircleConfig{"Phaser", Globals::get().UI_BLUE,
+                                          Globals::get().FONT}; // only the title changes
     _phaserProgressbar.configure(progressCircleConfig);
     progressCircleConfig.title = "Torpedo";
     _torpedoProgressbar.configure(progressCircleConfig);
 
-    progress::Config enemyShieldConfig{"Shield", globals::SHIELD_BLUE, font};
+    progress::Config enemyShieldConfig{"Shield", Globals::get().SHIELD_BLUE, Globals::get().FONT};
     _enemyShieldProgressbar.configure(enemyShieldConfig);
 
-    progress::Config enemyHullConfig{"Hull", globals::HULL_RED, font};
+    progress::Config enemyHullConfig{"Hull", Globals::get().HULL_RED, Globals::get().FONT};
     _enemyHullProgressbar.configure(enemyHullConfig);
 
     // shoot buttons

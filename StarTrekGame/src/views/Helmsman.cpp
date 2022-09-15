@@ -1,13 +1,14 @@
 #include "../../include/views/helmsman/Helmsman.hpp"
 #include "../../include/Game.hpp"
+#include "../../include/Globals.hpp"
 #include "../../include/Starship.hpp"
 
 views::Helmsman::Helmsman(sf::RenderWindow &window, Bridge &bridge)
-    : Component(window),
-      _panel("./assets/textures/panel.png"), _returnButton{m_window}, _starmap{m_window, bridge, _warpslider},
+    : Component(window), _returnButton{m_window}, _starmap{m_window, bridge, _warpslider},
       _warpslider{window, std::move(_warpsliderConfig)}
 {
-    _returnButton.setNewTexture("./assets/textures/controls/returnButton.png");
+    _panel.setNewTexture(Globals::get().PANEL_TEXTURE);
+    _returnButton.setNewTexture(Globals::get().RETURN_BTN_TEXTURE);
     resize(m_window.getSize(), m_window.getSize());
 }
 
