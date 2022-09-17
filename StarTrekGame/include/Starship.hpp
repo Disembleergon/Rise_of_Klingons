@@ -1,6 +1,7 @@
 #ifndef STARSHIP_HPP
 #define STARSHIP_HPP
 
+#include "framework/utils/Random.hpp"
 #include <compare>
 #include <vector>
 
@@ -26,6 +27,10 @@ struct EnemyData
 
     float hull{MAX_HULL};
     float shield{MAX_SHIELD};
+
+    float shootingDelay{Random::generate_floating_point(5.0f, 10.0f)};
+    bool isShootingPhasers{false};
+    float phaserShootingProgress{0.0f};
 };
 
 struct SystemData

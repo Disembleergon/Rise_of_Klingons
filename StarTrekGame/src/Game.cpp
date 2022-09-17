@@ -1,4 +1,5 @@
 #include "../include/Game.hpp"
+#include "../include/EnemyAttack.hpp"
 #include "../include/framework/utils/Time.hpp"
 
 // static member variable
@@ -64,6 +65,7 @@ void Game::run()
 
         // things that have to always get updated/drawn
         _helmsman.updateStarshipPositionOnStarmap();
+        updateEnemyAttacks();
 
         // update/draw things depending on current view
         switch (currentView)

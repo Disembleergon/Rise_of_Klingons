@@ -225,7 +225,7 @@ void AttackPanel::updateEnemyStatDisplays()
 
 void AttackPanel::phaser()
 {
-    if (_phaserShootingProgress > 2.5f || Starship::get().phaserAmmo <= 0.0f)
+    if (_phaserShootingProgress > Globals::get().PHASER_SHOOTING_DURATION || Starship::get().phaserAmmo <= 0.0f)
     {
         _isShootingPhaser = false;
         _phaserShootingProgress = 0.0f;

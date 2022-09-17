@@ -21,6 +21,8 @@ class Globals
     inline static const sf::Color HULL_RED{227, 93, 84};
     inline static const sf::Color SHIELD_BLUE{111, 210, 237};
 
+    static constexpr float PHASER_SHOOTING_DURATION = 2.5f;
+
     inline static resources::shared_font_ptr FONT{std::make_shared<sf::Font>()};
     inline static resources::shared_texture_ptr PANEL_TEXTURE{std::make_shared<sf::Texture>()};
     inline static resources::shared_texture_ptr RETURN_BTN_TEXTURE{std::make_shared<sf::Texture>()};
