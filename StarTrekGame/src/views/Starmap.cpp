@@ -18,6 +18,7 @@ Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &thrott
     _currentSystemButton = _starmapButtons.at(currentSystemButtonIndex).get();
     _currentSystemButton->setToggled(true);
 
+    _currentSystemButton->data.enemies.clear(); // no enemies in starting system
     Starship::get().currentSystemData = &_currentSystemButton->data;
 
     // place starship at selected system
