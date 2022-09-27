@@ -1,7 +1,9 @@
 #ifndef MISSIONVIEW_HPP
 #define MISSIONVIEW_HPP
 
-#include "../framework/Component.hpp"
+#include "../../framework/Component.hpp"
+#include "../../framework/GameSprite.hpp"
+#include "../../framework/gui/Clickables.hpp"
 #include <deque>
 #include <unordered_map>
 
@@ -30,8 +32,14 @@ class MissionView : public Component
     MissionView(sf::RenderWindow &window);
     void draw() override;
     void update() override;
-    // void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
-    // override;
+    void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
+
+  protected:
+    void generateMissions();
+
+  private:
+    GameSprite _panel;
+    Clickable _returnButton;
 };
 } // namespace views
 #endif

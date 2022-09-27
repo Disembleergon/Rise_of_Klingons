@@ -1,9 +1,9 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "views/MissionView.hpp"
 #include "views/bridge/Bridge.hpp"
 #include "views/helmsman/Helmsman.hpp"
+#include "views/missions/MissionView.hpp"
 #include "views/tacticalOfficer/TacticalOfficer.hpp"
 #include <SFML/Graphics.hpp>
 
