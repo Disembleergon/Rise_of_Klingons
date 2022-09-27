@@ -2,9 +2,9 @@
 #define BRIDGE_HPP
 
 #include "../../Starship.hpp"
-#include "../../framework/gui/Clickables.hpp"
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
+#include "../../framework/gui/Clickables.hpp"
 #include "GalaxyWindow.hpp"
 
 namespace views
@@ -55,8 +55,10 @@ class Bridge final : public Component
 
     GameSprite _bg;
     galaxywindow::GalaxyWindow _galaxyWindow;
+
     OutlineButton _helmsman;
     OutlineButton _tacticalOfficer;
+    OutlineButton _missionComputerButton;
 };
 
 } // namespace views

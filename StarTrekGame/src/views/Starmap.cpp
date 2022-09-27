@@ -1,5 +1,6 @@
 #include "../../include/views/helmsman/Starmap.hpp"
 #include "../../include/Game.hpp"
+#include "../../include/Globals.hpp"
 #include "../../include/Starship.hpp"
 #include "../../include/framework/utils/Random.hpp"
 #include "../../include/framework/utils/Time.hpp"
@@ -10,12 +11,14 @@ Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &thrott
     : Component(window), _throttleSlider{throttleSider}, _bridge{bridge}, _galaxyBG{"./assets/textures/galaxy.png"},
       _starship{"./assets/textures/starship.png", {}, {30, 60}}
 {
+    // SPACE_STATION_INDEX = starting system (current system for now)
+    Globals::get().SPACE_STATION_INDEX = Random::generate_integral<int>(0, Globals::get().SYSTEM_COUNT - 1);
+
     resize(m_window.getSize(), m_window.getSize());
-    generateButtons();
+    generateSystems();
 
     // select random star system and toggle it
-    const int currentSystemButtonIndex = Random::generate_integral<int>(0, SYSTEM_COUNT - 1);
-    _currentSystemButton = _starmapButtons.at(currentSystemButtonIndex).get();
+    _currentSystemButton = _starmapButtons.at(Globals::get().SPACE_STATION_INDEX).get();
     _currentSystemButton->setToggled(true);
 
     _currentSystemButton->data.enemies.clear(); // no enemies in starting system
@@ -157,7 +160,7 @@ void Starmap::configureButtons()
     }
 }
 
-void Starmap::generateButtons()
+void Starmap::generateSystems()
 {
     resources::shared_texture_ptr systemTexture = std::make_shared<sf::Texture>();
     resources::loadResource<sf::Texture>(systemTexture.get(), "./assets/textures/controls/starmapButton.png");
@@ -166,7 +169,7 @@ void Starmap::generateButtons()
     resources::loadResource<sf::Texture>(toggledSystemTexture.get(),
                                          "./assets/textures/controls/starmapButton_toggled.png");
 
-    for (int i = 0; i < SYSTEM_COUNT; ++i)
+    for (int i = 0; i < Globals::get().SYSTEM_COUNT; ++i)
     {
         StarmapButton::starmapbutton_ptr btn =
             std::make_unique<StarmapButton>(m_window, systemTexture, toggledSystemTexture);

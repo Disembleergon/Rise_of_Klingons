@@ -50,14 +50,13 @@ class Starmap final : public Component
     void slowDownShip();
 
     void configureButtons(); // repositioning & resizing buttons (on window resize event)
-    void generateButtons();
+    void generateSystems();
 
   private:
     float _starmapWidth;
     float _starmapHeight;
     GameSprite _galaxyBG;
 
-    static constexpr int SYSTEM_COUNT = 7;
     std::vector<StarmapButton::starmapbutton_ptr> _starmapButtons;
     StarmapButton *_currentSystemButton{};
 

@@ -1,6 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "views/MissionView.hpp"
 #include "views/bridge/Bridge.hpp"
 #include "views/helmsman/Helmsman.hpp"
 #include "views/tacticalOfficer/TacticalOfficer.hpp"
@@ -13,7 +14,8 @@ enum class View
 {
     BRIDGE,
     HELMSMAN,
-    TACTICAL_OFFICER
+    TACTICAL_OFFICER,
+    MISSION_VIEW
 };
 
 class Game
@@ -36,6 +38,7 @@ class Game
     views::Bridge _bridge;
     views::Helmsman _helmsman;
     views::TacticalOfficer _tacticalOfficer;
+    views::MissionView _missionView;
 };
 
 #endif

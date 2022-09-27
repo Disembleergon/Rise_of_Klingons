@@ -4,10 +4,11 @@
 
 views::Bridge::Bridge(sf::RenderWindow &window)
     : Component(window), _bg{"./assets/textures/bridge.png"}, _helmsman{m_window}, _tacticalOfficer{m_window},
-      _galaxyWindow{window}
+      _galaxyWindow{window}, _missionComputerButton{m_window}
 {
     _helmsman.setNewTexture("./assets/textures/helmsman.png");
     _tacticalOfficer.setNewTexture("./assets/textures/tacticalOfficer.png");
+    _missionComputerButton.setNewTexture("./assets/textures/controls/missionComputerButton.png");
 
     resize(m_window.getSize(), m_window.getSize());
 }
@@ -16,6 +17,7 @@ void views::Bridge::update()
 {
     _helmsman.update();
     _tacticalOfficer.update();
+    _missionComputerButton.update();
     _galaxyWindow.update();
 
     if (_helmsman.clicked())
@@ -25,6 +27,10 @@ void views::Bridge::update()
     else if (_tacticalOfficer.clicked())
     {
         Game::currentView = View::TACTICAL_OFFICER;
+    }
+    else if (_missionComputerButton.clicked())
+    {
+        Game::currentView = View::MISSION_VIEW;
     }
 
     // "flying" animation around the fixed position
@@ -50,6 +56,7 @@ void views::Bridge::draw()
     m_window.draw(_bg);
     _helmsman.draw();
     _tacticalOfficer.draw();
+    _missionComputerButton.draw();
 }
 
 void views::Bridge::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
@@ -61,6 +68,9 @@ void views::Bridge::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSi
     _helmsman.setSize(crewmemberSize);
     _tacticalOfficer.setPosition(newWindowSize.x * 0.71f, crewMemberY);
     _tacticalOfficer.setSize(crewmemberSize);
+
+    _missionComputerButton.setPosition(newWindowSize.x * 0.476f, newWindowSize.y * 0.65f);
+    _missionComputerButton.setSize({newWindowSize.x * 0.055f, newWindowSize.y * 0.07f});
 
     // for resizing the enemy ships
     const sf::Vector2f prevGalaxywindowSize = _galaxyWindow.windowSize;
