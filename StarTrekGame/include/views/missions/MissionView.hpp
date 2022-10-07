@@ -4,8 +4,10 @@
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
 #include "../../framework/gui/Clickables.hpp"
+#include "../../framework/gui/TextDisplay.hpp"
 #include <deque>
 #include <unordered_map>
+#include <vector>
 
 namespace views
 {
@@ -36,10 +38,17 @@ class MissionView : public Component
 
   protected:
     void generateMissions();
+    void generateMissionUIElements();
 
   private:
     GameSprite _panel;
     Clickable _returnButton;
+
+    int _prevMissionCount{0}; // for updating misison ui elements
+    GameSprite _missionOverviewPanel;
+
+    using missionElement_ptr = std::unique_ptr<TextDisplay>;
+    std::vector<missionElement_ptr> _missionUIElements;
 };
 } // namespace views
 #endif

@@ -10,19 +10,25 @@ const std::unordered_map<MissionView::MissionType, std::string> MissionView::_mi
     {MissionView::MissionType::RESCUE, "Rescue all friendly people in the marked system!"},
     {MissionView::MissionType::RETURN, "Return to the space station!"}};
 
-MissionView::MissionView(sf::RenderWindow &window) : Component(window), _returnButton(m_window)
+MissionView::MissionView(sf::RenderWindow &window)
+    : Component(window), _returnButton(m_window), _missionOverviewPanel{"./assets/textures/missionOverviewPanel.png"}
 {
     _panel.setNewTexture(Globals::get().PANEL_TEXTURE);
     _returnButton.setNewTexture(Globals::get().RETURN_BTN_TEXTURE);
-    resize(m_window.getSize(), m_window.getSize());
 
     generateMissions();
+    generateMissionUIElements();
+    resize(m_window.getSize(), m_window.getSize());
 }
 
 void MissionView::draw()
 {
     m_window.draw(_panel);
     _returnButton.draw();
+    m_window.draw(_missionOverviewPanel);
+
+    for (missionElement_ptr &elem : _missionUIElements)
+        elem->draw();
 }
 
 void MissionView::update()
@@ -31,6 +37,12 @@ void MissionView::update()
     if (_returnButton.clicked())
     {
         Game::currentView = View::BRIDGE;
+    }
+
+    if (_prevMissionCount != missionQueue.size())
+    {
+        generateMissionUIElements();
+        _prevMissionCount = missionQueue.size();
     }
 }
 
@@ -41,6 +53,20 @@ void views::MissionView::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWin
 
     _returnButton.setPosition(newWindowSize.x * 0.06f, newWindowSize.y * 0.08f);
     _returnButton.setSize({newWindowSize.x * 0.05f, newWindowSize.y * 0.07f});
+
+    const sf::Vector2f missionOverviewPanelPos = {newWindowSize.x * 0.1f, newWindowSize.y * 0.17f};
+    const sf::Vector2f missionOverviewPanelSize = {newWindowSize.x * 0.8f, newWindowSize.y * 0.65f};
+    _missionOverviewPanel.setPosition(missionOverviewPanelPos);
+    _missionOverviewPanel.setSize(missionOverviewPanelSize);
+
+    for (int i = 0; i < _missionUIElements.size(); ++i)
+    {
+        TextDisplay *missionElement = _missionUIElements.at(i).get();
+        missionElement->setPosition({missionOverviewPanelPos.x + missionOverviewPanelSize.x * 0.2f,
+                                     missionOverviewPanelPos.y + missionOverviewPanelSize.y * 0.15f * (i + 1)});
+        missionElement->setSize({missionOverviewPanelSize.x * 0.6f, missionOverviewPanelSize.y * 0.1f});
+        missionElement->updateTextWrap();
+    }
 }
 
 void views::MissionView::generateMissions()
@@ -71,4 +97,21 @@ void views::MissionView::generateMissions()
     returnMission.starsystemIndex = Globals::get().SPACE_STATION_INDEX;
     returnMission.type = MissionType::RETURN;
     missionQueue.push_back(std::move(returnMission));
+
+    _prevMissionCount = missionQueue.size();
+}
+
+void views::MissionView::generateMissionUIElements()
+{
+    _missionUIElements.clear();
+
+    resources::shared_texture_ptr bgTexture = std::make_shared<sf::Texture>();
+    resources::loadResource<sf::Texture>(bgTexture.get(), "./assets/textures/missionUIElement.png");
+
+    for (int i = 0; i < missionQueue.size(); ++i)
+    {
+        const auto missionDescription = _missionDescription.at(missionQueue[i].type);
+        missionElement_ptr missionElement = std::make_unique<TextDisplay>(m_window, missionDescription, bgTexture);
+        _missionUIElements.push_back(std::move(missionElement));
+    }
 }
