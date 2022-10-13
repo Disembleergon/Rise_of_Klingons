@@ -41,6 +41,7 @@ class Starmap final : public Component
     void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
     void updateStarshipPosition();
+    void placeMissionIndicator();
 
   protected:
     Slider &_throttleSlider;
@@ -61,6 +62,7 @@ class Starmap final : public Component
     StarmapButton *_currentSystemButton{};
 
     GameSprite _starship;
+    GameSprite _missionIndicator;
 };
 
 #endif

@@ -56,6 +56,9 @@ void Game::resize()
 
 void Game::run()
 {
+    _missionView.generateMissions();
+    _helmsman.starmap().placeMissionIndicator();
+
     while (m_window.isOpen())
     {
         Time::updateDeltaTime();
@@ -65,7 +68,7 @@ void Game::run()
         m_window.clear();
 
         // things that have to always get updated/drawn
-        _helmsman.updateStarshipPositionOnStarmap();
+        _helmsman.starmap().updateStarshipPosition();
         updateEnemyAttacks();
 
         // update/draw things depending on current view

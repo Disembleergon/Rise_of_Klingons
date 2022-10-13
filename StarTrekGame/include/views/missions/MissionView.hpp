@@ -36,9 +36,11 @@ class MissionView : public Component
     void update() override;
     void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
-  protected:
     void generateMissions();
+
+  protected:
     void generateMissionUIElements();
+    void configureMissionUIElements();
 
   private:
     GameSprite _panel;

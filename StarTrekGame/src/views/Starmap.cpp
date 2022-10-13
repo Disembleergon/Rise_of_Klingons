@@ -9,7 +9,7 @@ unsigned int Starmap::StarmapButton::enemyIdCounter = 0;
 
 Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &throttleSider)
     : Component(window), _throttleSlider{throttleSider}, _bridge{bridge}, _galaxyBG{"./assets/textures/galaxy.png"},
-      _starship{"./assets/textures/starship.png", {}, {30, 60}}
+      _starship{"./assets/textures/starship.png"}, _missionIndicator{"./assets/textures/missionIndicator.png"}
 {
     // SPACE_STATION_INDEX = starting system (current system for now)
     Globals::get().SPACE_STATION_INDEX = Random::generate_integral<int>(0, Globals::get().SYSTEM_COUNT - 1);
@@ -64,6 +64,7 @@ void Starmap::draw()
         btn->draw();
     }
 
+    m_window.draw(_missionIndicator);
     m_window.draw(_starship);
 }
 
@@ -75,17 +76,15 @@ void Starmap::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
     const sf::Vector2f prevStarmapSize{_starmapWidth, _starmapHeight};
     _galaxyBG.setPosition(newWindowSize.x * 0.36f, newWindowSize.y * 0.14f);
     _galaxyBG.setSize({_starmapWidth, _starmapHeight});
+
     _starship.setSize({newWindowSize.x * 0.02f, newWindowSize.y * 0.05f});
+    _starship.setOrigin(0.5f * _starship.getSize());
+
+    _missionIndicator.setSize({newWindowSize.x * 0.015f, newWindowSize.y * 0.02f});
+    _missionIndicator.setOrigin(0.5f * _missionIndicator.getSize());
+    placeMissionIndicator();
 
     configureButtons();
-
-    // ----- reconfigure starship -----
-    sf::Vector2f starshipSize = _starship.getSize();
-    sf::Vector2f relativeSize{starshipSize.x / prevStarmapSize.x, starshipSize.y / prevStarmapSize.y};
-    starshipSize = {relativeSize.x * _starmapWidth, relativeSize.y * _starmapHeight};
-
-    _starship.setSize(starshipSize);
-    _starship.setOrigin(_starship.getSize().x * 0.5f, _starship.getSize().y * 0.5f);
 
     if (_currentSystemButton)
         _starship.setPosition(getStarshipTargetPosition());
@@ -110,6 +109,19 @@ void Starmap::updateStarshipPosition()
     starshipPos.x += std::cos(angle) * Starship::get().thrust * Time::deltaTime * speedFactor;
     starshipPos.y += std::sin(angle) * Starship::get().thrust * Time::deltaTime * speedFactor;
     _starship.setPosition(starshipPos);
+}
+
+void Starmap::placeMissionIndicator()
+{
+    if (views::MissionView::missionQueue.size() == 0)
+        return;
+
+    const auto systemIndex = views::MissionView::missionQueue.front().starsystemIndex;
+    const StarmapButton *system = _starmapButtons.at(systemIndex).get();
+    const sf::Vector2f systemPos = system->getPosition();
+    const sf::Vector2f systemSize = system->getSize();
+
+    _missionIndicator.setPosition(systemPos.x + systemSize.x * 0.1f, systemPos.y + systemSize.y * 0.9f);
 }
 
 // --- private / protected ---
