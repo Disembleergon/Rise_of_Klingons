@@ -35,10 +35,10 @@ class Game
     void resize();
 
   private:
+    views::MissionView _missionView;
     views::Bridge _bridge;
     views::Helmsman _helmsman;
     views::TacticalOfficer _tacticalOfficer;
-    views::MissionView _missionView;
 };
 
 #endif

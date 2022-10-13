@@ -56,9 +56,6 @@ void Game::resize()
 
 void Game::run()
 {
-    _missionView.generateMissions();
-    _helmsman.starmap().placeMissionIndicator();
-
     while (m_window.isOpen())
     {
         Time::updateDeltaTime();

@@ -36,9 +36,8 @@ class MissionView : public Component
     void update() override;
     void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
 
-    void generateMissions();
-
   protected:
+    void generateMissions();
     void generateMissionUIElements();
     void configureMissionUIElements();
 

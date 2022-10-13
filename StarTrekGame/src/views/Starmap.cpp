@@ -16,6 +16,7 @@ Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &thrott
 
     resize(m_window.getSize(), m_window.getSize());
     generateSystems();
+    placeMissionIndicator();
 
     // select random star system and toggle it
     _currentSystemButton = _starmapButtons.at(Globals::get().SPACE_STATION_INDEX).get();
@@ -113,7 +114,7 @@ void Starmap::updateStarshipPosition()
 
 void Starmap::placeMissionIndicator()
 {
-    if (views::MissionView::missionQueue.size() == 0)
+    if (views::MissionView::missionQueue.size() == 0 || _starmapButtons.size() == 0)
         return;
 
     const auto systemIndex = views::MissionView::missionQueue.front().starsystemIndex;

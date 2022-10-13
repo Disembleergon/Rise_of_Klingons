@@ -15,6 +15,8 @@ MissionView::MissionView(sf::RenderWindow &window)
 {
     _panel.setNewTexture(Globals::get().PANEL_TEXTURE);
     _returnButton.setNewTexture(Globals::get().RETURN_BTN_TEXTURE);
+
+    generateMissions();
     resize(m_window.getSize(), m_window.getSize());
 }
 
