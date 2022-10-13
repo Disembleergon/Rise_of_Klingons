@@ -21,6 +21,7 @@ struct EnemyData
 
     bool operator==(const EnemyData &ed) const
     {
+        // ID for correctly erasing enemies when killing them
         return ID == ed.ID;
     }
     unsigned int ID; // not a const because that would remove the copy constructor and operator
