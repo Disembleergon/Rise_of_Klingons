@@ -45,7 +45,7 @@ void MissionView::update()
     }
 }
 
-void views::MissionView::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+void views::MissionView::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
 {
     _panel.setPosition(0, 0);
     _panel.setSize(static_cast<sf::Vector2f>(newWindowSize));

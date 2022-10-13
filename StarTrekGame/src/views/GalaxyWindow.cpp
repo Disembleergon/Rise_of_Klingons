@@ -53,7 +53,7 @@ void galaxywindow::GalaxyWindow::draw()
     for (const Star::star_ptr &star : _stars)
         m_window.draw(*star);
 }
-void galaxywindow::GalaxyWindow::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+void galaxywindow::GalaxyWindow::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
 {
     windowPos = {newWindowSize.x * 0.1f, newWindowSize.y * 0.07f};
     windowSize = {newWindowSize.x * 0.81f, newWindowSize.y * 0.48f};

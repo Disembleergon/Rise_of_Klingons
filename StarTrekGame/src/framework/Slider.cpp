@@ -44,7 +44,7 @@ void Slider::draw()
     m_window.draw(_knob);
 }
 
-void Slider::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+void Slider::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
 {
     _knob.setSize({_relKnobSize.x * newWindowSize.x, _relKnobSize.y * newWindowSize.y});
     _knob.setOrigin({_knob.getSize().x * 0.5f, 0});

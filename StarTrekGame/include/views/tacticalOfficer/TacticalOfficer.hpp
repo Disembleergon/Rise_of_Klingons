@@ -18,7 +18,7 @@ class TacticalOfficer final : public Component
 
     void update() override;
     void draw() override;
-    void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
+    void resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize) override;
 
   private:
     GameSprite _panel;
@@ -26,7 +26,7 @@ class TacticalOfficer final : public Component
 
     progress::ProgressCircle _starshipHullDisplay;
     progress::ProgressCircle _starshipShieldDisplay;
-    float _prevStarshipHull; // used to update the displays when health changed (comparision)
+    float _prevStarshipHull;   // used to update the displays when health changed (comparision)
     float _prevStarshipShield; // ^
 
     AttackPanel _attackPanel;

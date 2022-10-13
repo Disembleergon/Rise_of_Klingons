@@ -34,7 +34,7 @@ class MissionView : public Component
     MissionView(sf::RenderWindow &window);
     void draw() override;
     void update() override;
-    void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize) override;
+    void resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize) override;
 
   protected:
     void generateMissions();

@@ -127,7 +127,7 @@ void AttackPanel::draw()
     _torpedoShootButton.draw();
 }
 
-void AttackPanel::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+void AttackPanel::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
 {
     sf::Vector2f prevEnemyPanelPos = _enemyPanel.getPosition();
     sf::Vector2f prevEnemyPanelSize = _enemyPanel.getSize();

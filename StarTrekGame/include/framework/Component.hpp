@@ -18,7 +18,7 @@ class Component
 
     virtual void draw() = 0;
     virtual void update() = 0;
-    virtual void resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+    virtual void resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
     {
         // EMPTY
     }

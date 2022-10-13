@@ -69,7 +69,7 @@ void Starmap::draw()
     m_window.draw(_starship);
 }
 
-void Starmap::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+void Starmap::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
 {
     _starmapWidth = newWindowSize.x * 0.56f;
     _starmapHeight = newWindowSize.y * 0.69f;

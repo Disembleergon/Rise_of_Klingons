@@ -59,7 +59,7 @@ void views::Bridge::draw()
     _missionComputerButton.draw();
 }
 
-void views::Bridge::resize(sf::Vector2u prevWindowSize, sf::Vector2u newWindowSize)
+void views::Bridge::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
 {
     const sf::Vector2f crewmemberSize{newWindowSize.x * 0.11f, newWindowSize.y * 0.46f};
     const auto crewMemberY = newWindowSize.y * 0.45f;
