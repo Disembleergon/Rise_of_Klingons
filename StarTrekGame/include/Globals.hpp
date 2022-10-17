@@ -29,7 +29,7 @@ class Globals
     inline static resources::shared_texture_ptr PANEL_TEXTURE{std::make_shared<sf::Texture>()};
     inline static resources::shared_texture_ptr RETURN_BTN_TEXTURE{std::make_shared<sf::Texture>()};
 
-    // ---- MODIFIABLE (only one time) ----
+    // ---- MODIFIABLE ----
     int SPACE_STATION_INDEX{0};
 
   private:

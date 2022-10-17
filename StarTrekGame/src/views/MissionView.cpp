@@ -71,7 +71,7 @@ void views::MissionView::generateMissions()
         int prevMissionIndex = missionQueue.size() > 0 ? missionQueue.back().starsystemIndex : -1;
         int missionIndex = generateMissionIndex();
 
-        while (missionIndex == Globals::get().SPACE_STATION_INDEX || missionIndex == prevMissionIndex)
+        while (missionIndex == prevMissionIndex)
             missionIndex = generateMissionIndex();
 
         Mission m;

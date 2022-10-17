@@ -11,8 +11,14 @@ Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &thrott
     : Component(window), _throttleSlider{throttleSider}, _bridge{bridge}, _galaxyBG{"./assets/textures/galaxy.png"},
       _starship{"./assets/textures/starship.png"}, _missionIndicator{"./assets/textures/missionIndicator.png"}
 {
+    constexpr auto generateSpacestationIndex = []() {
+        Globals::get().SPACE_STATION_INDEX = Random::generate_integral<int>(0, Globals::get().SYSTEM_COUNT - 1);
+    };
+
     // SPACE_STATION_INDEX = starting system (current system for now)
-    Globals::get().SPACE_STATION_INDEX = Random::generate_integral<int>(0, Globals::get().SYSTEM_COUNT - 1);
+    generateSpacestationIndex();
+    while (Globals::get().SPACE_STATION_INDEX == views::MissionView::missionQueue.front().starsystemIndex)
+        generateSpacestationIndex();
 
     resize(m_window.getSize(), m_window.getSize());
     generateSystems();
