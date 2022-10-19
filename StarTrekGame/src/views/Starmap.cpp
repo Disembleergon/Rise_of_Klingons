@@ -108,7 +108,7 @@ void Starmap::updateStarshipPosition()
     if (distance <= 1) // starship already at target
         slowDownShip();
     else if (_throttleSlider.value() > 0)
-        _bridge.clearEnemyVec();
+        _bridge.clearGalaxyWindow();
 
     // move ship to target
     static constexpr float speedFactor = 0.35f;
@@ -192,6 +192,7 @@ void Starmap::generateSystems()
     {
         StarmapButton::starmapbutton_ptr btn =
             std::make_unique<StarmapButton>(m_window, systemTexture, toggledSystemTexture);
+        btn->data.systemIndex = i;
         _starmapButtons.push_back(std::move(btn));
     }
 

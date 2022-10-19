@@ -10,6 +10,8 @@ views::Bridge::Bridge(sf::RenderWindow &window)
     _tacticalOfficer.setNewTexture("./assets/textures/tacticalOfficer.png");
     _missionComputerButton.setNewTexture("./assets/textures/controls/missionComputerButton.png");
 
+    _prevSystemIndex = Starship::get().currentSystemData->systemIndex;
+    addSpacestation(); // first system always has one
     resize(m_window.getSize(), m_window.getSize());
 }
 
@@ -50,6 +52,10 @@ void views::Bridge::update()
 void views::Bridge::draw()
 {
     _galaxyWindow.draw();
+
+    if (_spacestation.has_value())
+        m_window.draw(_spacestation.value());
+
     for (const EnemyShip &enemy : _enemies)
         m_window.draw(enemy);
 
@@ -83,6 +89,17 @@ void views::Bridge::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2
     const sf::Vector2f newGalaxywindowSize = _galaxyWindow.windowSize;
     const sf::Vector2f newGalaxywindowPos = _galaxyWindow.windowPos;
 
+    if (_spacestation.has_value())
+    {
+        const auto stationPos = _spacestation.value().getPosition();
+        const sf::Vector2f relPos = {(stationPos.x - prevGalaxywindowPos.x) / prevGalaxywindowSize.x,
+                                     ((stationPos.y - prevGalaxywindowPos.y) / prevGalaxywindowSize.y)};
+        _spacestation.value().setPosition(newGalaxywindowPos.x + newGalaxywindowSize.x * relPos.x,
+                                          newGalaxywindowPos.y + newGalaxywindowSize.y * relPos.y);
+        _spacestation.value().setSize(
+            {newWindowSize.x * _spacestationSizeFactor.x, newWindowSize.y * _spacestationSizeFactor.y});
+    }
+
     for (EnemyShip &enemy : _enemies)
     {
         const sf::Vector2f enemyFixedPos = enemy.getFixedPosition();
@@ -100,8 +117,13 @@ void views::Bridge::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2
 void views::Bridge::onSystemArrival()
 {
     const SystemData *currentSystemData = Starship::get().currentSystemData;
-    if (_enemies.size() == currentSystemData->enemies.size())
-        return; // regenerating not neccessary
+    if (_prevSystemIndex == currentSystemData->systemIndex)
+        return; // regeneration already happened
+
+    _prevSystemIndex = currentSystemData->systemIndex;
+
+    if (currentSystemData->systemIndex == Globals::get().SPACE_STATION_INDEX)
+        addSpacestation();
 
     // ---- generate new ships ----
     _enemies.clear();
@@ -132,7 +154,31 @@ void views::Bridge::onSystemArrival()
     }
 }
 
-void views::Bridge::clearEnemyVec()
+void views::Bridge::clearGalaxyWindow()
 {
+    _prevSystemIndex = -1; // when stopping anywhere and returning to the same system
     _enemies.clear();
+    _spacestation.reset();
+}
+
+void views::Bridge::addSpacestation()
+{
+    GameSprite station{"./assets/textures/spacestation.png"};
+
+    _spacestationSizeFactor.x = Random::generate_floating_point(0.1f, 0.2f);
+    _spacestationSizeFactor.y = _spacestationSizeFactor.x * 2;
+
+    const auto windowSize = _galaxyWindow.windowSize;
+    const auto windowPos = _galaxyWindow.windowPos;
+    const sf::Vector2f size = {windowSize.x * _spacestationSizeFactor.x, windowSize.y * _spacestationSizeFactor.y};
+
+    const float x = windowPos.x + size.x * 0.5f + (windowSize.x - size.x) * Random::generate_floating_point(0.0f, 1.0f);
+    const float y = windowPos.y + size.y * 0.5f + (windowSize.y - size.y) * Random::generate_floating_point(0.0f, 1.0f);
+
+    station.setSize(size);
+    station.setOrigin({station.getLocalBounds().width * 0.5f, station.getLocalBounds().height * 0.5f});
+    station.setPosition(x, y);
+    _spacestation = station;
+
+    resize(m_window.getSize(), m_window.getSize()); // quick fix for weirdly stretched station when arriving
 }

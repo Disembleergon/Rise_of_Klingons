@@ -7,6 +7,8 @@
 #include "../../framework/gui/Clickables.hpp"
 #include "GalaxyWindow.hpp"
 
+#include <optional>
+
 namespace views
 {
 class Bridge final : public Component
@@ -48,10 +50,17 @@ class Bridge final : public Component
     void resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize) override;
 
     void onSystemArrival();
-    void clearEnemyVec();
+    void clearGalaxyWindow();
+
+  protected:
+    void addSpacestation();
 
   private:
+    int _prevSystemIndex;
     std::vector<EnemyShip> _enemies;
+
+    sf::Vector2f _spacestationSizeFactor;
+    std::optional<GameSprite> _spacestation;
 
     GameSprite _bg;
     galaxywindow::GalaxyWindow _galaxyWindow;

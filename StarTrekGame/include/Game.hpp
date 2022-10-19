@@ -36,8 +36,8 @@ class Game
 
   private:
     views::MissionView _missionView;
-    views::Bridge _bridge;
     views::Helmsman _helmsman;
+    views::Bridge _bridge;
     views::TacticalOfficer _tacticalOfficer;
 };
 

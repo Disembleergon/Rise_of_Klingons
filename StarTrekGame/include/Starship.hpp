@@ -36,6 +36,7 @@ struct EnemyData
 
 struct SystemData
 {
+    int systemIndex;
     std::vector<EnemyData> enemies;
     auto operator<=>(const SystemData &) const = default;
 };
