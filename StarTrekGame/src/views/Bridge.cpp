@@ -117,7 +117,7 @@ void views::Bridge::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2
 void views::Bridge::onSystemArrival()
 {
     const SystemData *currentSystemData = Starship::get().currentSystemData;
-    if (_prevSystemIndex == currentSystemData->systemIndex)
+    if (_prevSystemIndex == currentSystemData->systemIndex && _enemies.size() == currentSystemData->enemies.size())
         return; // regeneration already happened
 
     _prevSystemIndex = currentSystemData->systemIndex;
