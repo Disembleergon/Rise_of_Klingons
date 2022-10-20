@@ -9,7 +9,8 @@ unsigned int Starmap::StarmapButton::enemyIdCounter = 0;
 
 Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &throttleSider)
     : Component(window), _throttleSlider{throttleSider}, _bridge{bridge}, _galaxyBG{"./assets/textures/galaxy.png"},
-      _starship{"./assets/textures/starship.png"}, _missionIndicator{"./assets/textures/missionIndicator.png"}
+      _starship{"./assets/textures/starship.png"}, _missionIndicator{"./assets/textures/missionIndicator.png"},
+      _spacestationIndicator{"./assets/textures/spacestationIndicator.png"}
 {
     constexpr auto generateSpacestationIndex = []() {
         Globals::get().SPACE_STATION_INDEX = Random::generate_integral<int>(0, Globals::get().SYSTEM_COUNT - 1);
@@ -22,7 +23,7 @@ Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &thrott
 
     resize(m_window.getSize(), m_window.getSize());
     generateSystems();
-    placeMissionIndicator();
+    placeIndicator(_missionIndicator, views::MissionView::missionQueue.front().starsystemIndex);
 
     // select random star system and toggle it
     _currentSystemButton = _starmapButtons.at(Globals::get().SPACE_STATION_INDEX).get();
@@ -72,6 +73,7 @@ void Starmap::draw()
     }
 
     m_window.draw(_missionIndicator);
+    m_window.draw(_spacestationIndicator);
     m_window.draw(_starship);
 }
 
@@ -87,9 +89,14 @@ void Starmap::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &new
     _starship.setSize({newWindowSize.x * 0.02f, newWindowSize.y * 0.05f});
     _starship.setOrigin(0.5f * _starship.getSize());
 
-    _missionIndicator.setSize({newWindowSize.x * 0.015f, newWindowSize.y * 0.02f});
-    _missionIndicator.setOrigin(0.5f * _missionIndicator.getSize());
-    placeMissionIndicator();
+    const sf::Vector2f indicatorSize = {newWindowSize.x * 0.015f, newWindowSize.y * 0.02f};
+    _missionIndicator.setSize(indicatorSize);
+    _missionIndicator.setOrigin(0.5f * indicatorSize);
+    _spacestationIndicator.setSize(indicatorSize);
+    _spacestationIndicator.setOrigin(0.5f * indicatorSize);
+
+    placeIndicator(_spacestationIndicator, Globals::get().SPACE_STATION_INDEX);
+    placeIndicator(_missionIndicator, views::MissionView::missionQueue.front().starsystemIndex);
 
     configureButtons();
 
@@ -118,17 +125,15 @@ void Starmap::updateStarshipPosition()
     _starship.setPosition(starshipPos);
 }
 
-void Starmap::placeMissionIndicator()
+void Starmap::placeIndicator(GameSprite &indicator, int systemIndex)
 {
     if (views::MissionView::missionQueue.size() == 0 || _starmapButtons.size() == 0)
         return;
 
-    const auto systemIndex = views::MissionView::missionQueue.front().starsystemIndex;
     const StarmapButton *system = _starmapButtons.at(systemIndex).get();
     const sf::Vector2f systemPos = system->getPosition();
     const sf::Vector2f systemSize = system->getSize();
-
-    _missionIndicator.setPosition(systemPos.x + systemSize.x * 0.1f, systemPos.y + systemSize.y * 0.9f);
+    indicator.setPosition(systemPos.x + systemSize.x * 0.1f, systemPos.y + systemSize.y * 0.9f);
 }
 
 // --- private / protected ---

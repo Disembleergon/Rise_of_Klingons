@@ -43,7 +43,7 @@ class Starmap final : public Component
     void updateStarshipPosition();
 
   protected:
-    void placeMissionIndicator();
+    void placeIndicator(GameSprite &indicator, int systemIndex);
 
     Slider &_throttleSlider;
     views::Bridge &_bridge;
@@ -64,6 +64,7 @@ class Starmap final : public Component
 
     GameSprite _starship;
     GameSprite _missionIndicator;
+    GameSprite _spacestationIndicator;
 };
 
 #endif
