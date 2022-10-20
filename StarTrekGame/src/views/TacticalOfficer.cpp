@@ -5,7 +5,7 @@
 #define STARSHIP_STATS_PROGRESSBAR_SIZE 150u
 
 views::TacticalOfficer::TacticalOfficer(sf::RenderWindow &window)
-    : Component(window), _returnButton{m_window}, _attackPanel(window),
+    : Component(window), _returnButton{m_window}, _attackPanel(window), _contactPanel(window),
       _starshipHullDisplay(window, STARSHIP_STATS_PROGRESSBAR_SIZE),
       _starshipShieldDisplay(window, STARSHIP_STATS_PROGRESSBAR_SIZE)
 {
@@ -53,6 +53,7 @@ void views::TacticalOfficer::draw()
     _starshipShieldDisplay.draw();
 
     _attackPanel.draw();
+    _contactPanel.draw();
 }
 
 void views::TacticalOfficer::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
@@ -69,10 +70,11 @@ void views::TacticalOfficer::resize(const sf::Vector2u &prevWindowSize, const sf
     if (prevReturnButtonSize == 0.0f)
         prevReturnButtonSize = newReturnButtonSize;
 
-    _starshipHullDisplay.setPos({newWindowSize.x * 0.19f, newWindowSize.y * 0.8f});
+    _starshipHullDisplay.setPos({newWindowSize.x * 0.21f, newWindowSize.y * 0.8f});
     _starshipHullDisplay.resize(prevReturnButtonSize, newReturnButtonSize);
-    _starshipShieldDisplay.setPos({newWindowSize.x * 0.33f, newWindowSize.y * 0.8f});
+    _starshipShieldDisplay.setPos({newWindowSize.x * 0.35f, newWindowSize.y * 0.8f});
     _starshipShieldDisplay.resize(prevReturnButtonSize, newReturnButtonSize);
 
     _attackPanel.resize(prevWindowSize, newWindowSize);
+    _contactPanel.resize(prevWindowSize, newWindowSize);
 }

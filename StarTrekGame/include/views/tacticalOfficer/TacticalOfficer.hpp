@@ -5,6 +5,7 @@
 #include "../../framework/GameSprite.hpp"
 #include "../../framework/gui/Clickables.hpp"
 #include "AttackPanel.hpp"
+#include "ContactPanel.hpp"
 
 namespace views
 {
@@ -30,6 +31,7 @@ class TacticalOfficer final : public Component
     float _prevStarshipShield; // ^
 
     AttackPanel _attackPanel;
+    ContactPanel _contactPanel;
 };
 
 } // namespace views
