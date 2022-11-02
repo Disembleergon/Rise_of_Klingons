@@ -19,7 +19,7 @@ ContactPanel::ContactPanel(sf::RenderWindow &window)
     _titledBtnConig.font = Globals::get().FONT;
 
     resources::shared_texture_ptr btnTexture = std::make_shared<sf::Texture>();
-    resources::loadResource<sf::Texture>(btnTexture.get(), "./assets/textures/missionUIElement.png");
+    resources::loadResource<sf::Texture>(btnTexture.get(), "./assets/textures/textBar.png");
 
     _titledBtnConig.title = "Refill Ammo";
     _stationRefillAmmoButton.configure(_titledBtnConig);
@@ -78,7 +78,7 @@ void ContactPanel::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u
     _stationRepairHullButton.setSize({newWindowSize.x * 0.35f, newWindowSize.y * 0.05f});
     _stationRepairHullButton.resize(prevWindowSize, newWindowSize);
 
-    _stationRepresentation.setSize({newWindowSize.x * 0.12f, newWindowSize.y * 0.18f});
+    _stationRepresentation.setSize({newWindowSize.x * 0.10f, newWindowSize.y * 0.18f});
     _stationRepresentation.setOrigin(_stationRepresentation.getLocalBounds().width * 0.5f,
                                      _stationRepresentation.getLocalBounds().height * 0.5f);
     _stationRepresentation.setPosition(newWindowSize.x * 0.275f, newWindowSize.y * 0.53f);

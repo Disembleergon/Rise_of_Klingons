@@ -97,7 +97,7 @@ void views::MissionView::generateMissionUIElements()
     _missionUIElements.clear();
 
     resources::shared_texture_ptr bgTexture = std::make_shared<sf::Texture>();
-    resources::loadResource<sf::Texture>(bgTexture.get(), "./assets/textures/missionUIElement.png");
+    resources::loadResource<sf::Texture>(bgTexture.get(), "./assets/textures/textBar.png");
 
     for (int i = 0; i < missionQueue.size(); ++i)
     {
