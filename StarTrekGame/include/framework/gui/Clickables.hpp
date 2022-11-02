@@ -26,6 +26,27 @@ class Clickable : public GameSprite, public Component
     };
 };
 
+class TitledClickable : public Clickable
+{
+  public:
+    struct Config
+    {
+        sf::String title;
+        sf::Color color;
+        resources::shared_font_ptr font;
+    };
+
+    TitledClickable(sf::RenderWindow &);
+    void configure(const Config &);
+
+    void draw() override;
+    void resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize) override;
+
+  private:
+    resources::shared_font_ptr _font;
+    sf::Text _title;
+};
+
 // outline on hover
 class OutlineButton : public Clickable
 {

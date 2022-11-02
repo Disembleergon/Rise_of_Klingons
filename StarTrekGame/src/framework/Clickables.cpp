@@ -26,6 +26,38 @@ void Clickable::draw()
     m_window.draw(*this);
 }
 
+// ----- titled clickable -----
+
+TitledClickable::TitledClickable(sf::RenderWindow &window) : Clickable(window)
+{
+}
+
+void TitledClickable::draw()
+{
+    m_window.draw(*this);
+    m_window.draw(_title);
+}
+
+void TitledClickable::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
+{
+    const auto currSize = getSize();
+    const sf::Vector2f relSize{currSize.x / prevWindowSize.x, currSize.y / prevWindowSize.y};
+    const sf::Vector2f newSize{relSize.x * newWindowSize.x, relSize.y * newWindowSize.y};
+    setSize(newSize);
+
+    _title.setCharacterSize(newSize.y * 0.25f);
+    _title.setOrigin(_title.getLocalBounds().width * 0.5f, _title.getLocalBounds().height * 0.5f);
+    _title.setPosition(getPosition() + 0.5f * getSize());
+}
+
+void TitledClickable::configure(const Config &config)
+{
+    _font = config.font;
+    _title.setFont(*_font);
+    _title.setString(config.title);
+    _title.setFillColor(config.color);
+}
+
 // ----- outline button -----
 
 OutlineButton::OutlineButton(sf::RenderWindow &window) : Clickable(window)
