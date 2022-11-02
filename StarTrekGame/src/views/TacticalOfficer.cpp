@@ -42,6 +42,7 @@ void views::TacticalOfficer::update()
         _prevStarshipShield = currentShield;
     }
 
+    _contactPanel.update();
     _attackPanel.update();
 }
 

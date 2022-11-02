@@ -1,5 +1,6 @@
 #include "../../include/views/tacticalOfficer/ContactPanel.hpp"
 #include "../../include/Globals.hpp"
+#include "../../include/Starship.hpp"
 
 ContactPanel::ContactPanel(sf::RenderWindow &window)
     : Component(window), _stationRefillAmmoButton(window), _stationRepairHullButton(window),
@@ -40,6 +41,16 @@ void ContactPanel::update()
     case STATION:
         _stationRefillAmmoButton.update();
         _stationRepairHullButton.update();
+
+        if (_stationRefillAmmoButton.clicked())
+        {
+            Starship::get().phaserAmmo = MAX_PHASER_AMMO;
+            Starship::get().torpedoAmmo = MAX_TORPEDO_AMMO;
+        }
+        else if (_stationRepairHullButton.clicked())
+        {
+            Starship::get().hull = MAX_HULL;
+        }
         break;
     }
 }
