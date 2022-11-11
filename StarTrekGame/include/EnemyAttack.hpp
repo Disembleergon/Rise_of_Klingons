@@ -7,7 +7,7 @@
 
 void updateEnemyAttacks()
 {
-    if (Starship::get().thrust > 0)
+    if (!Starship::get().currentSystemData || Starship::get().thrust > 0)
         return;
 
     for (auto &enemy : Starship::get().currentSystemData->enemies)

@@ -45,7 +45,7 @@ void AttackPanel::update()
 
     // regenerate buttons on system arrival
     const SystemData *systemData = Starship::get().currentSystemData;
-    if (*systemData != _prevSystemData)
+    if (systemData && *systemData != _prevSystemData)
     {
         _selectedEnemy = nullptr;
         generateEnemyButtons();

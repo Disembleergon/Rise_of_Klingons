@@ -36,6 +36,13 @@ ContactPanel::ContactPanel(sf::RenderWindow &window)
 void ContactPanel::update()
 {
     using enum ContactMode;
+
+    SystemData *currentSystemData = Starship::get().currentSystemData;
+    if (!currentSystemData || currentSystemData->systemIndex != Globals::get().SPACE_STATION_INDEX)
+        _currentMode = NONE;
+    else if (currentSystemData->systemIndex == Globals::get().SPACE_STATION_INDEX)
+        _currentMode = STATION;
+
     switch (_currentMode)
     {
     case STATION:

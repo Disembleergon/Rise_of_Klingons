@@ -113,9 +113,14 @@ void Starmap::updateStarshipPosition()
 
     const auto distance = std::hypot(shipToTargetX, shipToTargetY);
     if (distance <= 1) // starship already at target
+    {
         slowDownShip();
+    }
     else if (_throttleSlider.value() > 0)
+    {
         _bridge.clearGalaxyWindow();
+        Starship::get().currentSystemData = nullptr;
+    }
 
     // move ship to target
     static constexpr float speedFactor = 0.35f;
