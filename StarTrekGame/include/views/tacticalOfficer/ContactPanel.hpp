@@ -26,11 +26,15 @@ class ContactPanel final : public Component
 
   private:
     sf::RectangleShape _panel;
-
     sf::Text _title;
+
     TitledClickable _stationRefillAmmoButton;
     TitledClickable _stationRepairHullButton;
     GameSprite _stationRepresentation;
+
+    TitledClickable _enemyShieldHackButton;
+    TitledClickable _enemyWeaponHackButton;
+    GameSprite _enemyRepresentation;
 };
 
 #endif

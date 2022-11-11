@@ -38,7 +38,7 @@ void AttackPanel::update()
     if (currentThrust > 0 && !_cleanupAlreadyHappened) // no enemies when travelling
     {
         _enemyButtons.clear();
-        _selectedEnemy = nullptr;
+        selectedEnemy = nullptr;
         updateEnemyStatDisplays();
         _cleanupAlreadyHappened = true;
     }
@@ -47,7 +47,7 @@ void AttackPanel::update()
     const SystemData *systemData = Starship::get().currentSystemData;
     if (systemData && *systemData != _prevSystemData)
     {
-        _selectedEnemy = nullptr;
+        selectedEnemy = nullptr;
         generateEnemyButtons();
         updateEnemyStatDisplays();
         _prevSystemData = *systemData;
@@ -79,7 +79,7 @@ void AttackPanel::update()
         if (btn->clicked())
         {
             btn->setToggled(true);
-            _selectedEnemy = btn.get();
+            selectedEnemy = btn.get();
 
             updateEnemyStatDisplays();
 
@@ -211,10 +211,10 @@ void AttackPanel::updateEnemyStatDisplays()
     float hull = 0.0f;
     float shield = 0.0f;
 
-    if (_selectedEnemy)
+    if (selectedEnemy)
     {
-        hull = _selectedEnemy->data.hull;
-        shield = _selectedEnemy->data.shield;
+        hull = selectedEnemy->data.hull;
+        shield = selectedEnemy->data.shield;
     }
 
     _enemyHullProgressbar.setPercentage(hull / MAX_HULL);
@@ -236,18 +236,18 @@ void AttackPanel::phaser()
     Starship::get().phaserAmmo -= Time::deltaTime;
 
     // no enemy selected
-    if (!_selectedEnemy)
+    if (!selectedEnemy)
         return;
 
     static constexpr int SHIELD_DAMAGE = 8;
     static constexpr int HULL_DAMAGE = 3;
 
     if (_enemyShieldProgressbar.percentage() > 0.0f)
-        _selectedEnemy->data.shield -= Time::deltaTime * SHIELD_DAMAGE;
+        selectedEnemy->data.shield -= Time::deltaTime * SHIELD_DAMAGE;
     else if (_enemyHullProgressbar.percentage() > 0.0f)
-        _selectedEnemy->data.hull -= Time::deltaTime * HULL_DAMAGE;
+        selectedEnemy->data.hull -= Time::deltaTime * HULL_DAMAGE;
 
-    if (_selectedEnemy->data.hull == 0.0f)
+    if (selectedEnemy->data.hull == 0.0f)
         killSelectedShip();
 
     updateEnemyStatDisplays();
@@ -269,11 +269,11 @@ void AttackPanel::torpedo()
         static constexpr int HULL_DAMAGE = 55;
 
         if (_enemyShieldProgressbar.percentage() > 0.0f)
-            _selectedEnemy->data.shield = std::max(0.0f, _selectedEnemy->data.shield - SHIELD_DAMAGE);
+            selectedEnemy->data.shield = std::max(0.0f, selectedEnemy->data.shield - SHIELD_DAMAGE);
         else if (_enemyHullProgressbar.percentage() > 0.0f)
-            _selectedEnemy->data.hull = std::max(0.0f, _selectedEnemy->data.hull - HULL_DAMAGE);
+            selectedEnemy->data.hull = std::max(0.0f, selectedEnemy->data.hull - HULL_DAMAGE);
 
-        if (_selectedEnemy->data.hull == 0.0f)
+        if (selectedEnemy->data.hull == 0.0f)
             killSelectedShip();
 
         updateEnemyStatDisplays();
@@ -292,8 +292,8 @@ void AttackPanel::killSelectedShip()
 {
     // kill (remove) enemy ship
     auto &enemyVector = Starship::get().currentSystemData->enemies;
-    auto isSelectedEnemy = std::remove(enemyVector.begin(), enemyVector.end(), _selectedEnemy->data);
+    auto isSelectedEnemy = std::remove(enemyVector.begin(), enemyVector.end(), selectedEnemy->data);
     enemyVector.erase(isSelectedEnemy, enemyVector.end());
 
-    _selectedEnemy = nullptr;
+    selectedEnemy = nullptr;
 }

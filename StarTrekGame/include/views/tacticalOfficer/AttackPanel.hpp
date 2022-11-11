@@ -29,6 +29,8 @@ class AttackPanel final : public Component
     void draw() override;
     void resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize) override;
 
+    inline static EnemyButton *selectedEnemy{nullptr};
+
   protected:
     void generateEnemyButtons();
     void updateEnemyStatDisplays();
@@ -39,7 +41,6 @@ class AttackPanel final : public Component
   private:
     GameSprite _enemyPanel;
     std::vector<EnemyButton::enemybutton_ptr> _enemyButtons;
-    EnemyButton *_selectedEnemy{nullptr};
 
     progress::ProgressBar _enemyShieldProgressbar;
     progress::ProgressBar _enemyHullProgressbar;
