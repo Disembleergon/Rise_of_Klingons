@@ -9,7 +9,7 @@ int main()
 
     try
     {
-        Game window{windowWidth, windowHeight, "Star Trek Game"};
+        Game window{windowWidth, windowHeight, "Star Trek: Rise of Klingons"};
         window.run();
     }
     catch (const asset_not_found &e)
