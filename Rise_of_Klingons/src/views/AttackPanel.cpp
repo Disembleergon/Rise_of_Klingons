@@ -111,6 +111,20 @@ void AttackPanel::update()
 
     if (_isShootingTorpedo)
         torpedo();
+
+    if (!selectedEnemy)
+        return;
+
+    // update enemy stats
+    const auto currentShields = selectedEnemy->data.shield;
+    const auto currentHull = selectedEnemy->data.hull;
+
+    if (_prevShields != currentShields || _prevHull != currentHull)
+    {
+        updateEnemyStatDisplays();
+        _prevShields = currentShields;
+        _prevHull = currentHull;
+    }
 }
 
 void AttackPanel::draw()
@@ -249,8 +263,6 @@ void AttackPanel::phaser()
 
     if (selectedEnemy->data.hull == 0.0f)
         killSelectedShip();
-
-    updateEnemyStatDisplays();
 }
 
 void AttackPanel::torpedo()
@@ -276,8 +288,6 @@ void AttackPanel::torpedo()
         if (selectedEnemy->data.hull == 0.0f)
             killSelectedShip();
 
-        updateEnemyStatDisplays();
-
         // reset
         _isShootingTorpedo = false;
         _torpedoWasReleased = false;
@@ -290,6 +300,12 @@ void AttackPanel::torpedo()
 
 void AttackPanel::killSelectedShip()
 {
+    EnemyButton *enemyToGetHacked = Starship::get().enemyToGetHacked;
+
+    // dont continue hacking the destroyed ship
+    if (enemyToGetHacked && selectedEnemy->data == enemyToGetHacked->data)
+        Starship::get().enemyToGetHacked = nullptr;
+
     // kill (remove) enemy ship
     auto &enemyVector = Starship::get().currentSystemData->enemies;
     auto isSelectedEnemy = std::remove(enemyVector.begin(), enemyVector.end(), selectedEnemy->data);

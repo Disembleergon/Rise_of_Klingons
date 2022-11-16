@@ -1,6 +1,7 @@
 #include "../../include/views/tacticalOfficer/ContactPanel.hpp"
 #include "../../include/Globals.hpp"
 #include "../../include/Starship.hpp"
+#include "../../include/framework/utils/Time.hpp"
 #include "../../include/views/tacticalOfficer/AttackPanel.hpp"
 
 ContactPanel::ContactPanel(sf::RenderWindow &window)
@@ -80,8 +81,18 @@ void ContactPanel::update()
     case ENEMY:
         _enemyShieldHackButton.update();
         _enemyWeaponHackButton.update();
+
+        if (_enemyShieldHackButton.clicked())
+        {
+            Starship::get().enemyToGetHacked = AttackPanel::selectedEnemy;
+        }
         break;
     }
+
+    if (Starship::get().enemyToGetHacked)
+        hackEnemyShield();
+    else
+        _hackingProgress = 0.0f;
 
     configureTitle();
 }
@@ -145,6 +156,17 @@ void ContactPanel::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u
     _enemyRepresentation.setOrigin(_stationRepresentation.getLocalBounds().width * 0.5f,
                                    _stationRepresentation.getLocalBounds().height * 0.5f);
     _enemyRepresentation.setPosition(newWindowSize.x * 0.255f, newWindowSize.y * 0.55f);
+}
+
+void ContactPanel::hackEnemyShield()
+{
+    _hackingProgress += Time::deltaTime;
+    if (_hackingProgress < 15.0f)
+        return;
+
+    Starship::get().enemyToGetHacked->data.shield = 0.0f;
+    Starship::get().enemyToGetHacked = nullptr;
+    _hackingProgress = 0.0f;
 }
 
 void ContactPanel::configureTitle()

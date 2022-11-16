@@ -6,22 +6,10 @@
 #include "../../framework/GameSprite.hpp"
 #include "../../framework/gui/Clickables.hpp"
 #include "../../framework/gui/Progress.hpp"
+#include "EnemyButton.hpp"
 
 class AttackPanel final : public Component
 {
-    class EnemyButton final : public ToggleButton
-    {
-      public:
-        EnemyButton(sf::RenderWindow &window, const resources::shared_texture_ptr &texture1,
-                    const resources::shared_texture_ptr &texture2, EnemyData &enemydata)
-            : ToggleButton(window, texture1, texture2), data{enemydata}
-        {
-        }
-
-        EnemyData &data; // modify enemy data value of current system data (stored in current selected StarmapButton)
-        using enemybutton_ptr = std::unique_ptr<EnemyButton>;
-    };
-
   public:
     AttackPanel(sf::RenderWindow &);
 
@@ -44,6 +32,8 @@ class AttackPanel final : public Component
 
     progress::ProgressBar _enemyShieldProgressbar;
     progress::ProgressBar _enemyHullProgressbar;
+    float _prevShields{MAX_SHIELD};
+    float _prevHull{MAX_HULL};
 
     progress::ProgressCircle _phaserProgressbar;
     progress::ProgressCircle _torpedoProgressbar;

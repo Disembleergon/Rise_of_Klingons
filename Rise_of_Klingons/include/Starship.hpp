@@ -45,6 +45,8 @@ struct SystemData
  * Singleton
  */
 
+class EnemyButton;
+
 class Starship final
 {
   public:
@@ -60,10 +62,12 @@ class Starship final
 
     using phaserAmmo_t = float;
     using torpedoAmmo_t = int;
-    float phaserAmmo{MAX_PHASER_AMMO};
-    int torpedoAmmo{MAX_TORPEDO_AMMO};
+    phaserAmmo_t phaserAmmo{MAX_PHASER_AMMO};
+    torpedoAmmo_t torpedoAmmo{MAX_TORPEDO_AMMO};
 
     SystemData *currentSystemData{nullptr}; // pointer to modify the system data (stored in StarmapButton class)
+    EnemyButton *enemyToGetHacked{
+        nullptr}; // for ContactPanel (hacking) and AttackPanel (setting to nullptr when destroyed)
 
   private:
     Starship() = default;

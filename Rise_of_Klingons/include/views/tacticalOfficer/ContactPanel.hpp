@@ -3,6 +3,7 @@
 
 #include "../../framework/Component.hpp"
 #include "../../framework/gui/Clickables.hpp"
+#include "EnemyButton.hpp"
 
 class ContactPanel final : public Component
 {
@@ -22,6 +23,7 @@ class ContactPanel final : public Component
     void resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize) override;
 
   protected:
+    void hackEnemyShield();
     void configureTitle();
 
   private:
@@ -35,6 +37,8 @@ class ContactPanel final : public Component
     TitledClickable _enemyShieldHackButton;
     TitledClickable _enemyWeaponHackButton;
     GameSprite _enemyRepresentation;
+
+    float _hackingProgress{0.0f};
 };
 
 #endif
