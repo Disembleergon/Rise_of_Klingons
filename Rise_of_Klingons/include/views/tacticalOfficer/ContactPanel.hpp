@@ -3,6 +3,7 @@
 
 #include "../../framework/Component.hpp"
 #include "../../framework/gui/Clickables.hpp"
+#include "../../framework/gui/Progress.hpp"
 #include "EnemyButton.hpp"
 
 class ContactPanel final : public Component
@@ -24,6 +25,7 @@ class ContactPanel final : public Component
 
   protected:
     void hackEnemyShield();
+    void updateHackingProgressBar(float percentage);
     void configureTitle();
 
   private:
@@ -37,6 +39,7 @@ class ContactPanel final : public Component
     TitledClickable _enemyShieldHackButton;
     TitledClickable _enemyWeaponHackButton;
     GameSprite _enemyRepresentation;
+    progress::ProgressCircle _hackingProgressCircle;
 
     float _hackingProgress{0.0f};
 };

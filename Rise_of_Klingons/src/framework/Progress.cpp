@@ -17,11 +17,14 @@ progress::ProgressCircle::ProgressCircle(sf::RenderWindow &window, unsigned int 
 void progress::ProgressCircle::update()
 {
     // text
-    const int percentageToDisplay = std::ceil(_percentage * 100);
-    const std::string percentageText = std::to_string(percentageToDisplay) + "%";
-    _percentageDisplay.setString(percentageText);
-    _percentageDisplay.setOrigin(0.5f * _percentageDisplay.getLocalBounds().width,
-                                 0.5f * _percentageDisplay.getLocalBounds().height);
+    if (_showPercentage)
+    {
+        const int percentageToDisplay = std::ceil(_percentage * 100);
+        const std::string percentageText = std::to_string(percentageToDisplay) + "%";
+        _percentageDisplay.setString(percentageText);
+        _percentageDisplay.setOrigin(0.5f * _percentageDisplay.getLocalBounds().width,
+                                     0.5f * _percentageDisplay.getLocalBounds().height);
+    }
 
     // indicator points
     _points.clear();
@@ -46,7 +49,9 @@ void progress::ProgressCircle::draw()
     for (sf::RectangleShape &p : _points)
         m_window.draw(p);
 
-    m_window.draw(_percentageDisplay);
+    if (_showPercentage)
+        m_window.draw(_percentageDisplay);
+
     m_window.draw(_titleDisplay);
 }
 

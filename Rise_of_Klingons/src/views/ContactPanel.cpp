@@ -7,7 +7,8 @@
 ContactPanel::ContactPanel(sf::RenderWindow &window)
     : Component(window), _stationRefillAmmoButton(window), _stationRepairHullButton(window),
       _stationRepresentation("./assets/textures/spacestation_blue.png"), _enemyShieldHackButton(window),
-      _enemyWeaponHackButton(window), _enemyRepresentation("./assets/textures/enemy_top_blue.png")
+      _enemyWeaponHackButton(window),
+      _enemyRepresentation("./assets/textures/enemy_top_blue.png"), _hackingProgressCircle{window, 190u}
 {
     const sf::Color BLUE{99, 155, 255};
     _panel.setFillColor(sf::Color{203, 219, 252});
@@ -41,6 +42,13 @@ ContactPanel::ContactPanel(sf::RenderWindow &window)
     _enemyWeaponHackButton.configure(_titledBtnConig);
     _enemyWeaponHackButton.setNewTexture(btnTexture);
     // ----
+
+    progress::Config progressBarConfig;
+    progressBarConfig.title = "";
+    progressBarConfig.font = nullptr;
+    progressBarConfig.color = BLUE;
+    _hackingProgressCircle.configure(progressBarConfig);
+    _hackingProgressCircle.showPercentage(false);
 
     resize(m_window.getSize(), m_window.getSize());
 }
@@ -82,7 +90,7 @@ void ContactPanel::update()
         _enemyShieldHackButton.update();
         _enemyWeaponHackButton.update();
 
-        if (_enemyShieldHackButton.clicked())
+        if (_enemyShieldHackButton.clicked() && !Starship::get().enemyToGetHacked)
         {
             Starship::get().enemyToGetHacked = AttackPanel::selectedEnemy;
         }
@@ -115,15 +123,21 @@ void ContactPanel::draw()
         _enemyShieldHackButton.draw();
         _enemyWeaponHackButton.draw();
         m_window.draw(_enemyRepresentation);
+        _hackingProgressCircle.draw();
         break;
     }
 }
 
 void ContactPanel::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &newWindowSize)
 {
+    auto prevPanelSize = _panel.getSize(); // for _hackingProgressBar
     _panel.setOutlineThickness(newWindowSize.x * 0.005f);
     _panel.setPosition(newWindowSize.x * 0.09f, newWindowSize.y * 0.2f);
     _panel.setSize({newWindowSize.x * 0.39f, newWindowSize.y * 0.45f});
+
+    // first time always 0
+    if (prevPanelSize.x == 0.0f)
+        prevPanelSize = _panel.getSize();
 
     _title.setCharacterSize(_panel.getSize().y * 0.05f);
     configureTitle();
@@ -152,21 +166,50 @@ void ContactPanel::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u
     _enemyWeaponHackButton.setSize({newWindowSize.x * 0.35f, newWindowSize.y * 0.05f});
     _enemyWeaponHackButton.resize(prevWindowSize, newWindowSize);
 
-    _enemyRepresentation.setSize({newWindowSize.x * 0.15f, newWindowSize.y * 0.15f});
+    _enemyRepresentation.setSize({newWindowSize.x * 0.13f, newWindowSize.y * 0.13f});
     _enemyRepresentation.setOrigin(_stationRepresentation.getLocalBounds().width * 0.5f,
                                    _stationRepresentation.getLocalBounds().height * 0.5f);
-    _enemyRepresentation.setPosition(newWindowSize.x * 0.255f, newWindowSize.y * 0.55f);
+    _enemyRepresentation.setPosition(newWindowSize.x * 0.262f, newWindowSize.y * 0.56f);
+
+    _hackingProgressCircle.setPos({newWindowSize.x * 0.275f, newWindowSize.y * 0.54f});
+    _hackingProgressCircle.resize(prevPanelSize.x, _panel.getSize().x);
 }
 
 void ContactPanel::hackEnemyShield()
 {
+    static constexpr float HACKING_DURATION = 15.0f;
     _hackingProgress += Time::deltaTime;
-    if (_hackingProgress < 15.0f)
+
+    if (!AttackPanel::selectedEnemy)
+    {
+        Starship::get().enemyToGetHacked = nullptr;
+        _hackingProgress = 0.0f;
+        updateHackingProgressBar(0.0f);
+    }
+    else if (Starship::get().enemyToGetHacked->data == AttackPanel::selectedEnemy->data)
+    {
+        updateHackingProgressBar(_hackingProgress / HACKING_DURATION);
+    }
+    else
+    {
+        // current view isnt the one that gets hacked... dont show progress
+        updateHackingProgressBar(0.0f);
+    }
+
+    if (_hackingProgress < HACKING_DURATION)
         return;
 
     Starship::get().enemyToGetHacked->data.shield = 0.0f;
     Starship::get().enemyToGetHacked = nullptr;
     _hackingProgress = 0.0f;
+
+    updateHackingProgressBar(0.0f);
+}
+
+void ContactPanel::updateHackingProgressBar(float percentage)
+{
+    _hackingProgressCircle.setPercentage(percentage);
+    _hackingProgressCircle.update();
 }
 
 void ContactPanel::configureTitle()

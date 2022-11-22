@@ -62,6 +62,11 @@ class ProgressCircle final : public Component, public ProgressElement
         _titleDisplay.setPosition(pos.x, pos.y + _size * 0.85f);
     }
 
+    void showPercentage(bool sp)
+    {
+        _showPercentage = sp;
+    }
+
   protected:
     void generatePoint(float i, const sf::Color &clr);
 
@@ -74,6 +79,7 @@ class ProgressCircle final : public Component, public ProgressElement
     resources::shared_font_ptr _font;
     sf::Text _percentageDisplay;
     sf::Text _titleDisplay;
+    bool _showPercentage{true};
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
