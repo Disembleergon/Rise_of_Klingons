@@ -87,22 +87,40 @@ void ContactPanel::update()
         }
         break;
     case ENEMY:
+        //////
         _enemyShieldHackButton.update();
         _enemyWeaponHackButton.update();
 
         if (_enemyShieldHackButton.clicked() && !Starship::get().enemyToGetHacked)
         {
+            _currentHackingMode = HackingMode::SHIELD;
             Starship::get().enemyToGetHacked = AttackPanel::selectedEnemy;
         }
-        break;
+
+        if (_enemyWeaponHackButton.clicked() && AttackPanel::selectedEnemy->data.weaponsInterruptedDuration == 0.0f &&
+            !Starship::get().enemyToGetHacked)
+        {
+            _currentHackingMode = HackingMode::WEAPONS;
+            Starship::get().enemyToGetHacked = AttackPanel::selectedEnemy;
+        }
+
+        configureTitle();
     }
 
     if (Starship::get().enemyToGetHacked)
-        hackEnemyShield();
+    {
+        switch (_currentHackingMode)
+        {
+        case HackingMode::SHIELD:
+            hackEnemyShield();
+            break;
+        case HackingMode::WEAPONS:
+            hackEnemyWeapons();
+            break;
+        }
+    }
     else
         _hackingProgress = 0.0f;
-
-    configureTitle();
 }
 
 void ContactPanel::draw()
@@ -179,22 +197,7 @@ void ContactPanel::hackEnemyShield()
 {
     static constexpr float HACKING_DURATION = 15.0f;
     _hackingProgress += Time::deltaTime;
-
-    if (!AttackPanel::selectedEnemy)
-    {
-        Starship::get().enemyToGetHacked = nullptr;
-        _hackingProgress = 0.0f;
-        updateHackingProgressBar(0.0f);
-    }
-    else if (Starship::get().enemyToGetHacked->data == AttackPanel::selectedEnemy->data)
-    {
-        updateHackingProgressBar(_hackingProgress / HACKING_DURATION);
-    }
-    else
-    {
-        // current view isnt the one that gets hacked... dont show progress
-        updateHackingProgressBar(0.0f);
-    }
+    showHackingProgress(HACKING_DURATION);
 
     if (_hackingProgress < HACKING_DURATION)
         return;
@@ -202,8 +205,46 @@ void ContactPanel::hackEnemyShield()
     Starship::get().enemyToGetHacked->data.shield = 0.0f;
     Starship::get().enemyToGetHacked = nullptr;
     _hackingProgress = 0.0f;
+    _currentHackingMode = HackingMode::NONE;
 
     updateHackingProgressBar(0.0f);
+}
+
+void ContactPanel::hackEnemyWeapons()
+{
+    static constexpr float HACKING_DURATION = 10.0f;
+    _hackingProgress += Time::deltaTime;
+    showHackingProgress(HACKING_DURATION);
+
+    if (_hackingProgress < HACKING_DURATION)
+        return;
+
+    Starship::get().enemyToGetHacked->data.weaponsInterruptedDuration = 20.0f; // rest gets handled by EnemyAttack.hpp
+    Starship::get().enemyToGetHacked = nullptr;
+    _hackingProgress = 0.0f;
+    _currentHackingMode = HackingMode::NONE;
+
+    updateHackingProgressBar(0.0f);
+}
+
+void ContactPanel::showHackingProgress(float hackingDuration)
+{
+    if (!AttackPanel::selectedEnemy)
+    {
+        Starship::get().enemyToGetHacked = nullptr;
+        _hackingProgress = 0.0f;
+        _currentHackingMode = HackingMode::NONE;
+        updateHackingProgressBar(0.0f);
+    }
+    else if (Starship::get().enemyToGetHacked->data == AttackPanel::selectedEnemy->data)
+    {
+        updateHackingProgressBar(_hackingProgress / hackingDuration);
+    }
+    else
+    {
+        // current view isnt the one that gets hacked... dont show progress
+        updateHackingProgressBar(0.0f);
+    }
 }
 
 void ContactPanel::updateHackingProgressBar(float percentage)

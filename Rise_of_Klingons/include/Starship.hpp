@@ -32,6 +32,7 @@ struct EnemyData
     float shootingDelay{Random::generate_floating_point(5.0f, 10.0f)};
     bool isShootingPhasers{false};
     float phaserShootingProgress{0.0f};
+    float weaponsInterruptedDuration{0.0f};
 };
 
 struct SystemData

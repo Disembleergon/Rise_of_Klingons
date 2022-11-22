@@ -16,6 +16,14 @@ class ContactPanel final : public Component
     };
     ContactMode _currentMode{ContactMode::STATION};
 
+    enum class HackingMode
+    {
+        SHIELD,
+        WEAPONS,
+        NONE
+    };
+    HackingMode _currentHackingMode;
+
   public:
     ContactPanel(sf::RenderWindow &);
 
@@ -25,6 +33,8 @@ class ContactPanel final : public Component
 
   protected:
     void hackEnemyShield();
+    void hackEnemyWeapons();
+    void showHackingProgress(float hackingDuration);
     void updateHackingProgressBar(float percentage);
     void configureTitle();
 

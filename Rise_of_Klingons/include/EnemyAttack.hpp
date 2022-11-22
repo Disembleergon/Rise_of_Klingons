@@ -13,6 +13,14 @@ void updateEnemyAttacks()
     for (auto &enemy : Starship::get().currentSystemData->enemies)
     {
         ////////////////PHASER/////////////////
+
+        // handle hacked enemies
+        if (enemy.weaponsInterruptedDuration > 0.0f)
+        {
+            enemy.weaponsInterruptedDuration = std::max(enemy.weaponsInterruptedDuration - Time::deltaTime, 0.0f);
+            continue;
+        }
+
         // delay between each phaser shot
         if (enemy.shootingDelay > 0)
             enemy.shootingDelay -= Time::deltaTime;
