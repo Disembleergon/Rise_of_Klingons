@@ -9,9 +9,21 @@ Clickable::Clickable(sf::RenderWindow &window) : Component(window)
 
 void Clickable::update()
 {
+    if (_stillClicking)
+    {
+        _clicked = false;
+        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            _stillClicking = false;
+    }
+
     if (getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(m_window))))
     {
-        _clicked = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && !_stillClicking)
+        {
+            _clicked = true;
+            _stillClicking = true;
+        }
+
         hoverAnimation(true);
     }
     else
@@ -99,10 +111,6 @@ void ToggleButton::toggle()
 
 void ToggleButton::setToggled(bool state)
 {
-    if (toggledSinceCurrentClick) // only toggle on second click (one click =
-        return;                   // holding down mouse button -> flashy)
-
-    toggledSinceCurrentClick = true;
     _toggled = state;
     setTexture(_toggled ? _texture2.get() : _texture1.get());
 }

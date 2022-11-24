@@ -56,10 +56,6 @@ void Starmap::update()
                 b->setToggled(false);
             }
         }
-        else
-        {
-            btn->toggledSinceCurrentClick = false;
-        }
     }
 }
 

@@ -91,10 +91,6 @@ void AttackPanel::update()
                 b->setToggled(false);
             }
         }
-        else
-        {
-            btn->toggledSinceCurrentClick = false;
-        }
     }
 
     // update shooting buttons

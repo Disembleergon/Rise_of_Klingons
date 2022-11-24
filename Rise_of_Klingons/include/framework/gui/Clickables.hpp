@@ -11,9 +11,14 @@ class Clickable : public GameSprite, public Component
     Clickable() = delete;
     Clickable(sf::RenderWindow &window);
 
-    bool clicked() const
+    [[nodiscard]] bool clicked() const
     {
         return _clicked;
+    }
+
+    [[nodiscard]] bool held() const
+    {
+        return _stillClicking;
     }
 
     void update() override;
@@ -21,6 +26,8 @@ class Clickable : public GameSprite, public Component
 
   protected:
     bool _clicked{false};
+    bool _stillClicking{false};
+
     virtual void hoverAnimation(bool hover){
         // EMPTY
     };
@@ -68,7 +75,6 @@ class ToggleButton : public OutlineButton
 
     void toggle();
     void setToggled(bool state);
-    bool toggledSinceCurrentClick{false}; // take a look at toggle()
 
   private:
     const resources::shared_texture_ptr _texture1;
