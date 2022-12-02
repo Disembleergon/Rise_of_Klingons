@@ -2,7 +2,9 @@
 #define RESOURCELOADER_HPP
 
 #include "ErrorHandling.hpp"
-#include "SFML/Graphics.hpp"
+#include "SFML/Audio/SoundBuffer.hpp"
+#include "SFML/Graphics/Font.hpp"
+#include "SFML/Graphics/Texture.hpp"
 
 #include <concepts>
 
@@ -14,7 +16,7 @@ using shared_font_ptr = std::shared_ptr<sf::Font>;
 //
 
 template <class T>
-requires std::is_same_v<T, sf::Texture> || std::is_same_v<T, sf::Font>
+    requires std::is_same_v<T, sf::Texture> || std::is_same_v<T, sf::Font> || std::is_same_v<T, sf::SoundBuffer>
 void loadResource(T *ptr, const sf::String &path)
 {
     if (!ptr->loadFromFile(path))

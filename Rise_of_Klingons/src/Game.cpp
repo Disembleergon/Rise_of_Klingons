@@ -1,5 +1,6 @@
 #include "../include/Game.hpp"
 #include "../include/EnemyAttack.hpp"
+#include "../include/framework/SoundSystem.hpp"
 #include "../include/framework/utils/Time.hpp"
 
 // static member variable
@@ -59,6 +60,7 @@ void Game::run()
     while (m_window.isOpen())
     {
         Time::updateDeltaTime();
+        sound::SoundSystem::cleanUp();
 
         _previousWindowSize = m_window.getSize();
         handleEvents();
