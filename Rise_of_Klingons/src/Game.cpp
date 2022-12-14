@@ -57,6 +57,11 @@ void Game::resize()
 
 void Game::run()
 {
+    sf::Music bridgeBackgroundSound;
+    bridgeBackgroundSound.openFromFile("./assets/audio/bridgeBackgroundSound.wav");
+    bridgeBackgroundSound.setLoop(true);
+    bridgeBackgroundSound.play();
+
     while (m_window.isOpen())
     {
         Time::updateDeltaTime();
