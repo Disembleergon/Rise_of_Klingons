@@ -10,8 +10,13 @@ unsigned int Starmap::StarmapButton::enemyIdCounter = 0;
 Starmap::Starmap(sf::RenderWindow &window, views::Bridge &bridge, Slider &throttleSider)
     : Component(window), _throttleSlider{throttleSider}, _bridge{bridge}, _galaxyBG{"./assets/textures/galaxy.png"},
       _starship{"./assets/textures/starship.png"}, _missionIndicator{"./assets/textures/missionIndicator.png"},
-      _spacestationIndicator{"./assets/textures/spacestationIndicator.png"}
+      _spacestationIndicator{"./assets/textures/spacestationIndicator.png"},
+      _warpSoundBuffer(std::make_unique<sf::SoundBuffer>())
 {
+    resources::loadResource(_warpSoundBuffer.get(), "./assets/audio/warpSound.wav");
+    _warpSound.setBuffer(*_warpSoundBuffer);
+    _warpSound.setLoop(true);
+
     constexpr auto generateSpacestationIndex = []() {
         Globals::get().SPACE_STATION_INDEX = Random::generate_integral<int>(0, Globals::get().SYSTEM_COUNT - 1);
     };
@@ -100,6 +105,8 @@ void Starmap::resize(const sf::Vector2u &prevWindowSize, const sf::Vector2u &new
         _starship.setPosition(getStarshipTargetPosition());
 }
 
+static constexpr float MIN_PITCH_WARPSOUND = 0.5f;
+
 void Starmap::updateStarshipPosition()
 {
     sf::Vector2f starshipPos = _starship.getPosition();
@@ -116,6 +123,11 @@ void Starmap::updateStarshipPosition()
     {
         _bridge.clearGalaxyWindow();
         Starship::get().currentSystemData = nullptr;
+
+        if (_warpSound.getStatus() != sf::SoundSource::Playing)
+            _warpSound.play();
+
+        _warpSound.setPitch(MIN_PITCH_WARPSOUND + _throttleSlider.value());
     }
 
     // move ship to target
@@ -156,11 +168,15 @@ void Starmap::slowDownShip()
     {
         Starship::get().currentSystemData = &_currentSystemButton->data;
         _bridge.onSystemArrival();
+
+        _warpSound.setPitch(1.0f);
+        _warpSound.stop();
+
         return;
     }
+    _warpSound.setPitch(MIN_PITCH_WARPSOUND + _throttleSlider.value());
 
     static constexpr float SPEED_REDUCTION = 1.5f;
-
     const float thrustVal = std::max(0.0f, _throttleSlider.value() - SPEED_REDUCTION * Time::deltaTime);
     _throttleSlider.setValue(thrustVal);
     Starship::get().thrust = _throttleSlider.value() * MAX_THRUST;

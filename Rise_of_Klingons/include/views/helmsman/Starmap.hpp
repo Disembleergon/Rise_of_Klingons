@@ -9,6 +9,8 @@
 #include "../../framework/utils/Random.hpp"
 #include "../bridge/Bridge.hpp"
 
+#include <SFML/Audio/Sound.hpp>
+
 class Starmap final : public Component
 {
     class StarmapButton final : public ToggleButton
@@ -65,6 +67,9 @@ class Starmap final : public Component
     GameSprite _starship;
     GameSprite _missionIndicator;
     GameSprite _spacestationIndicator;
+
+    sf::Sound _warpSound;
+    std::unique_ptr<sf::SoundBuffer> _warpSoundBuffer;
 };
 
 #endif
