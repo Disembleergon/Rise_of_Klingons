@@ -1,6 +1,5 @@
 #include "../include/Game.hpp"
 #include "../include/EnemyAttack.hpp"
-#include "../include/framework/SoundSystem.hpp"
 #include "../include/framework/utils/Time.hpp"
 
 // static member variable

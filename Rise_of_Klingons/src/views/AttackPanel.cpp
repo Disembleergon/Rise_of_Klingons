@@ -8,7 +8,8 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
     : Component(window), _enemyPanel("./assets/textures/enemyOverviewPanel.png"),
       _phaserProgressbar(window, PROGRESSBAR_SIZE), _torpedoProgressbar(window, PROGRESSBAR_SIZE),
       _enemyShieldProgressbar(window), _enemyHullProgressbar(window), _phaserShootButton(window),
-      _torpedoShootButton(window), _prevSystemData{*Starship::get().currentSystemData}
+      _torpedoShootButton(window), _prevSystemData{*Starship::get().currentSystemData},
+      _phaserSoundBuffer(std::make_unique<sf::SoundBuffer>())
 {
     // --- configure progress bars ---
     progress::Config progressCircleConfig{"Phaser", Globals::get().UI_BLUE,
@@ -27,6 +28,9 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
     const sf::String btnImg = "./assets/textures/controls/shootButton.png";
     _phaserShootButton.setNewTexture(btnImg);
     _torpedoShootButton.setNewTexture(btnImg);
+
+    resources::loadResource<sf::SoundBuffer>(_phaserSoundBuffer.get(), "./assets/audio/phaserBanks.wav");
+    _phaserSound.setBuffer(*_phaserSoundBuffer);
 
     resize(m_window.getSize(), m_window.getSize());
     generateEnemyButtons();
@@ -103,7 +107,12 @@ void AttackPanel::update()
         _isShootingTorpedo = true;
 
     if (_isShootingPhaser)
+    {
+        if (_phaserSound.getStatus() == sf::SoundSource::Stopped)
+            _phaserSound.play();
+
         phaser();
+    }
 
     if (_isShootingTorpedo)
         torpedo();

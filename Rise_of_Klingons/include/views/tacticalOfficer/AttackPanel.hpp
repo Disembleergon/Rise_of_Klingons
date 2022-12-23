@@ -4,6 +4,7 @@
 #include "../../Starship.hpp"
 #include "../../framework/Component.hpp"
 #include "../../framework/GameSprite.hpp"
+#include "../../framework/SoundSystem.hpp"
 #include "../../framework/gui/Clickables.hpp"
 #include "../../framework/gui/Progress.hpp"
 #include "EnemyButton.hpp"
@@ -53,6 +54,9 @@ class AttackPanel final : public Component
     bool _isShootingTorpedo{false};
     bool _torpedoWasReleased{false};
     float _torpedoShootingProgress{0.0f}; // ^
+
+    std::unique_ptr<sf::SoundBuffer> _phaserSoundBuffer;
+    sf::Sound _phaserSound;
 };
 
 #endif
