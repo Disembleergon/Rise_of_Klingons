@@ -55,6 +55,7 @@ class AttackPanel final : public Component
     bool _torpedoWasReleased{false};
     float _torpedoShootingProgress{0.0f}; // ^
 
+    std::unique_ptr<sf::SoundBuffer> _torpedoSoundBuffer;
     std::unique_ptr<sf::SoundBuffer> _phaserSoundBuffer;
     sf::Sound _phaserSound;
 };

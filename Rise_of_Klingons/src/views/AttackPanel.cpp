@@ -9,7 +9,7 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
       _phaserProgressbar(window, PROGRESSBAR_SIZE), _torpedoProgressbar(window, PROGRESSBAR_SIZE),
       _enemyShieldProgressbar(window), _enemyHullProgressbar(window), _phaserShootButton(window),
       _torpedoShootButton(window), _prevSystemData{*Starship::get().currentSystemData},
-      _phaserSoundBuffer(std::make_unique<sf::SoundBuffer>())
+      _phaserSoundBuffer(std::make_unique<sf::SoundBuffer>()), _torpedoSoundBuffer(std::make_unique<sf::SoundBuffer>())
 {
     // --- configure progress bars ---
     progress::Config progressCircleConfig{"Phaser", Globals::get().UI_BLUE,
@@ -29,6 +29,7 @@ AttackPanel::AttackPanel(sf::RenderWindow &window)
     _phaserShootButton.setNewTexture(btnImg);
     _torpedoShootButton.setNewTexture(btnImg);
 
+    resources::loadResource<sf::SoundBuffer>(_torpedoSoundBuffer.get(), "./assets/audio/torpedoSound.wav");
     resources::loadResource<sf::SoundBuffer>(_phaserSoundBuffer.get(), "./assets/audio/phaserBanks.wav");
     _phaserSound.setBuffer(*_phaserSoundBuffer);
 
@@ -104,7 +105,11 @@ void AttackPanel::update()
 
     _torpedoShootButton.update();
     if (_torpedoShootButton.clicked())
+    {
+        if (!_isShootingTorpedo && selectedEnemy)
+            sound::SoundSystem::playAudio(*_torpedoSoundBuffer);
         _isShootingTorpedo = true;
+    }
 
     if (_isShootingPhaser)
     {
@@ -272,6 +277,16 @@ void AttackPanel::phaser()
 
 void AttackPanel::torpedo()
 {
+    if (!selectedEnemy)
+    {
+        // reset
+        _isShootingTorpedo = false;
+        _torpedoWasReleased = false;
+        _torpedoShootingProgress = 0.0f;
+
+        return;
+    }
+
     // after pressing the button, directly substract the used ammo
     if (!_torpedoWasReleased)
     {
