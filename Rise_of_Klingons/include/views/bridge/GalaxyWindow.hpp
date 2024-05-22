@@ -2,6 +2,7 @@
 #define GALAXYWINDOW_HPP
 
 #include "../../framework/Component.hpp"
+#include <memory>
 
 namespace galaxywindow
 {

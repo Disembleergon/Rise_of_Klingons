@@ -4,3 +4,5 @@
 /*.filters
 /*.vcxproj
 /*.sln
+/*.out
+/*.o

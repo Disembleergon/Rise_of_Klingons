@@ -6,6 +6,7 @@
 #include "../../framework/gui/Clickables.hpp"
 #include "AttackPanel.hpp"
 #include "ContactPanel.hpp"
+#include <memory>
 
 namespace views
 {

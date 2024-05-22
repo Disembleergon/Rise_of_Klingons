@@ -3,6 +3,7 @@
 
 #include "utils/ResourceLoader.hpp"
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 class GameSprite : public sf::RectangleShape
 {

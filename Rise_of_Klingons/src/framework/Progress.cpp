@@ -1,5 +1,6 @@
 #include "../../include/framework/gui/Progress.hpp"
 #include <numbers>
+#include <cmath>
 
 static constexpr int GREYVALUE = 40;
 static constexpr int GREYTEXTVALUE = GREYVALUE + 100;

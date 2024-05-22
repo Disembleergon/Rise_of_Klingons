@@ -8,6 +8,7 @@
 #include "../../framework/gui/Slider.hpp"
 #include "../../framework/utils/Random.hpp"
 #include "../bridge/Bridge.hpp"
+#include <memory>
 
 #include <SFML/Audio/Sound.hpp>
 

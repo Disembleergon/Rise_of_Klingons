@@ -5,8 +5,10 @@
 #include "SFML/Audio/SoundBuffer.hpp"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Texture.hpp"
+#include "SFML/System/String.hpp"
 
 #include <concepts>
+#include <memory>
 
 namespace resources
 {

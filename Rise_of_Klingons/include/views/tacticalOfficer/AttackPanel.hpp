@@ -8,6 +8,7 @@
 #include "../../framework/gui/Clickables.hpp"
 #include "../../framework/gui/Progress.hpp"
 #include "EnemyButton.hpp"
+#include <memory>
 
 class AttackPanel final : public Component
 {

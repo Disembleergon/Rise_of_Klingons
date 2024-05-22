@@ -3,6 +3,7 @@
 
 #include "../../Starship.hpp"
 #include "../../framework/gui/Clickables.hpp"
+#include <memory>
 
 class EnemyButton final : public ToggleButton
 {
